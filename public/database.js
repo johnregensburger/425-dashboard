@@ -36,7 +36,7 @@ db.serialize(() => {
     db.run( /*TODO USER DATABASE? */
         `
         CREATE TABLE IF NOT EXISTS Users (
-            userId INTEGER PRIMARY KEY,
+            userId INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT,
             password TEXT
         )
@@ -45,8 +45,8 @@ db.serialize(() => {
 
     db.run(
         `
-        CREATE TABLE IF NOT EXISTS OwnedGames (
-            ownershipId INTEGER PRIMARY KEY,
+        CREATE TABLE IF NOT EXISTS UserLibrary (
+            ownershipId INTEGER PRIMARY KEY AUTOINCREMENT,
             userId INTEGER,
             username TEXT,
             gameId INTEGER,
@@ -101,7 +101,7 @@ async function populateTable(result) {
         const age = game.age[0];
 
         db.run(`
-            INSERT INTO Games (gameId, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age)
+            INSERT OR IGNORE INTO Games (gameId, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [gameId, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age],
             function (e) {
@@ -119,3 +119,5 @@ async function populateTable(result) {
 (async () => { //this method will be the first thing that runs.
     await iterate();
 })();
+
+module.exports = db;
