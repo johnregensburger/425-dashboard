@@ -1,5 +1,4 @@
 // JH 10.24 - Handles SQLite3 database operations
-
 const sqlite3 = require("sqlite3").verbose();
 const xml2js = require("xml2js");
 
@@ -34,7 +33,7 @@ db.serialize(() => {
         `
     );
 
-    db.run(
+    db.run( /*TODO USER DATABASE? */
         `
         CREATE TABLE IF NOT EXISTS Users (
             userId INTEGER PRIMARY KEY,
@@ -42,6 +41,7 @@ db.serialize(() => {
             password TEXT
         )
         ` // ^^^ Passwords should be hashed and salted, but that's a later problem
+    );      //is it?
     );
 
     db.run(
@@ -64,11 +64,11 @@ async function iterate() {
         const data = await fetchData(i); // Fetch data of game with ID = i
         const xmlData = await data.text(); // Readable API data as it would show up at the URL
             
-        xml2js.parseString(xmlData, async (e, result) => {
+        xml2js.parseString(xmlData, async (e, result) => { //uses xml2js to parse data into readable JS
             if (e) {
                 throw e;
             } else {
-                await populateTable(result);
+                await populateTable(result); //the above parameters e(error) and result are whats returned from the parse
             }
         });
     }
@@ -115,6 +115,6 @@ async function populateTable(result) {
     }
 }
 
-(async () => {
+(async () => { //this method will be the first thing that runs.
     await iterate();
 })();
