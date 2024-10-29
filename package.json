@@ -10,7 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "425-dashboard": "file:",
+    "axios": "^1.7.7",
     "express": "^4.21.1",
-    "sqlite3": "^5.1.7"
+    "node-fetch": "^3.3.2",
+    "sqlite3": "^5.1.7",
+    "xml2js": "^0.6.2"
   }
 }
