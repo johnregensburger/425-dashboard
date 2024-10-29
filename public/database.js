@@ -115,8 +115,6 @@ async function populateTable(result) {
     }
 }
 
-module.exports = db;
-
 (async () => {
     await iterate();
 })();
