@@ -47,11 +47,13 @@ db.serialize(() => {
         `
         CREATE TABLE IF NOT EXISTS OwnedGames (
             ownershipId INTEGER PRIMARY KEY,
-            FOREIGN KEY(userId) REFERENCES Users(userId),
+            userId INTEGER,
             username TEXT,
-            FOREIGN KEY(gameId) REFERENCES Games(gameId),
+            gameId INTEGER,
             gameName TEXT,
-            status TEXT
+            status TEXT,
+            FOREIGN KEY(userId) REFERENCES Users(userId),
+            FOREIGN KEY(gameId) REFERENCES Games(gameId)
         )
         ` // ^^^ status should be either "owned" or "wishlisted"
     )
