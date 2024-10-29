@@ -14,7 +14,7 @@ let db = new sqlite3.Database("dashboard.db", (e) => {
     console.log("Database connected");
 });
 
-// Create table of games and table of users
+// Create table of games, a table of users, and a table of games owned/wishlisted by users
 db.serialize(() => {
     db.run(
         `
@@ -43,6 +43,19 @@ db.serialize(() => {
         )
         ` // ^^^ Passwords should be hashed and salted, but that's a later problem
     );
+
+    db.run(
+        `
+        CREATE TABLE IF NOT EXISTS OwnedGames (
+            ownershipId INTEGER PRIMARY KEY,
+            FOREIGN KEY(userId) REFERENCES Users(userId),
+            username TEXT,
+            FOREIGN KEY(gameId) REFERENCES Games(gameId),
+            gameName TEXT,
+            status TEXT
+        )
+        ` // ^^^ status should be either "owned" or "wishlisted"
+    )
 });
 
 async function iterate() {
@@ -101,6 +114,8 @@ async function populateTable(result) {
         console.error(e);
     }
 }
+
+module.exports = db;
 
 (async () => {
     await iterate();
