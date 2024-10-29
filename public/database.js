@@ -42,7 +42,6 @@ db.serialize(() => {
         )
         ` // ^^^ Passwords should be hashed and salted, but that's a later problem
     );      //is it?
-    );
 
     db.run(
         `
