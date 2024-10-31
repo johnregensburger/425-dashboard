@@ -6,7 +6,7 @@ const apiUrl = "https://boardgamegeek.com/xmlapi/boardgame/"; // Final slash pro
                                                               // ex: boardgame/1?
 
 // Create and connect database
-let db = new sqlite3.Database("dashboard.db", (e) => {
+let db = new sqlite3.Database("public/dashboard.db", (e) => {
     if (e) {
         console.error(e.message);
     }
