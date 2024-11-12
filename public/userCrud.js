@@ -1,7 +1,14 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = require("./database.js");
 
+        // TODO: Create hash function to pass passwords through
+function encryptPassword(password) {
+    const encryptedPassword = "";
+    return encryptedPassword;
+}
+
 // Creates a new user with specified username and password
+        // TODO: Implement encryption
 function createUser(username, password) {
     db.run(
         `
@@ -21,6 +28,7 @@ function createUser(username, password) {
 }
 
 // Reads user by searching for ID
+        // TODO: Implement decryption
 function readUser(id) {
     db.get(`
         SELECT userId, username, password
@@ -37,6 +45,7 @@ function readUser(id) {
 
 
 // Updates column of user with newValue
+        // TODO: Implement encryption and decryption
 function updateUser(id, column, newValue) {
     const query = `UPDATE Users SET ${column} = ? WHERE userId = ?`;
     db.run(query, [newValue, id], function (err) {
