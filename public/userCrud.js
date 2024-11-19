@@ -3,10 +3,12 @@ const db = require("./database.js");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
+// Encrypts password
 async function encryptPassword(password) {
     return await bcrypt.hash(password, saltRounds);
 }
 
+// Verifies passwords
 async function verifyPassword(plaintextPassword, hashedPassword) {
     return await bcrypt.compare(plaintextPassword, hashedPassword);
 }
