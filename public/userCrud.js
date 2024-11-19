@@ -1,35 +1,42 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = require("./database.js");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
-        // TODO: Create hash function to pass passwords through
-function encryptPassword(password) {
-    const encryptedPassword = "";
-    return encryptedPassword;
+async function encryptPassword(password) {
+    return await bcrypt.hash(password, saltRounds);
+}
+
+async function verifyPassword(plaintextPassword, hashedPassword) {
+    return await bcrypt.compare(plaintextPassword, hashedPassword);
 }
 
 // Creates a new user with specified username and password
-        // TODO: Implement encryption
-function createUser(username, password) {
-    db.run(
-        `
-        INSERT OR IGNORE INTO Users (username, password)
-        VALUES (?, ?)
-        `,
-        [username, password],
-        function (e) {
-            if (e) {
-                console.log(`ERR: User creation failed. See below:`);
-                console.error(e.message);
-            } else {
-                console.log(`Inserted user`);
+async function createUser(username, password) {
+    try {
+        const hashedPassword = await encryptPassword(password);
+        db.run(
+            `
+            INSERT OR IGNORE INTO Users (username, password)
+            VALUES (?, ?)
+            `,
+            [username, hashedPassword],
+            function (e) {
+                if (e) {
+                    console.log(`ERR: User creation failed. See below:`);
+                    console.error(e.message);
+                } else {
+                    console.log(`Inserted user`);
+                }
             }
-        }
-    );
+        );
+    } catch (e) {
+        console.error(e.message);
+    }
 }
 
 // Reads user by searching for ID
-        // TODO: Implement decryption
-function readUser(id) {
+async function readUser(id) {
     db.get(`
         SELECT userId, username, password
         FROM Users
@@ -45,8 +52,10 @@ function readUser(id) {
 
 
 // Updates column of user with newValue
-        // TODO: Implement encryption and decryption
-function updateUser(id, column, newValue) {
+async function updateUser(id, column, newValue) {
+    if (column == "password") {
+        newValue = encryptPassword(newValue);
+    }
     const query = `UPDATE Users SET ${column} = ? WHERE userId = ?`;
     db.run(query, [newValue, id], function (err) {
         if (err) {
@@ -72,8 +81,17 @@ function deleteUser(id) {
     });
 }
 
-//console.log("-=-=-=-=-=-=-=-=-=-=-=-=- TESTING BEGIN -=-=-=-=-=-=-=-=-=-=-=-=-");
-//createUser("johnr", "msu");
-//updateUser(1, "password", "csc");
-//deleteUser(1);
-//readUser(1);
+module.exports = {
+    createUser,
+    readUser,
+    updateUser,
+    deleteUser
+};
+
+console.log("-=-=-=-=-=-=-=-=-=-=-=-=- TESTING BEGIN -=-=-=-=-=-=-=-=-=-=-=-=-");
+createUser("johnr", "msu");
+console.log(readUser(1));
+updateUser(1, "password", "csc");
+console.log(readUser(1));
+deleteUser(1);
+console.log(readUser(1));
