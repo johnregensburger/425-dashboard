@@ -69,3 +69,10 @@ function deleteGame(id) {
         }
     });
 }
+
+module.exports = {
+    createGame,
+    readGame,
+    updateGame,
+    deleteGame
+}
