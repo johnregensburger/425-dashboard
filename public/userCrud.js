@@ -39,16 +39,19 @@ async function createUser(username, password) {
 
 // Reads user by searching for ID
 async function readUser(id) {
-    db.get(`
-        SELECT userId, username, password
-        FROM Users
-        WHERE userId = ?`, [id], (err, row) => {
-        if (err) {
-            console.log(`ERR: User read failed. See below:`);
-            console.error(err.message);
-        } else {
-            console.log(row);
-        }
+    return new Promise((resolve, reject) => {
+        db.get(`
+            SELECT userId, username, password
+            FROM Users
+            WHERE userId = ?`, [id], (err, row) => {
+            if (err) {
+                console.log(`ERR: User read failed. See below:`);
+                console.error(err.message);
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
     });
 }
 
