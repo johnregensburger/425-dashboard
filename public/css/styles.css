@@ -8,6 +8,18 @@
   background-color: #242424;
 }
 
+/* General reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main {
+  padding: 20px;
+  transition: margin-left 0.3s ease; /* Ensure content shifts smoothly */
+}
+
 h1 {
   font-size: 6em;
   line-height: 1.1;
@@ -59,13 +71,6 @@ button:focus-visible {
 outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* General reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 /* Main container - Flexbox layout for side-by-side sections */
 .container {
   display: flex;
@@ -92,12 +97,12 @@ outline: 4px auto -webkit-focus-ring-color;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f4f4f4;
+  background-color: #242424;
 }
 
 .right img {
-  width: 700px;
-  height: 590px;
+  width: 100%; /* Ensure image resizes with the container */
+  height: auto;
 }
 
 /* Style for dynamically added elements in the left section */
@@ -118,4 +123,84 @@ input.text {
   border: 1px solid white;
   border-radius: 5px;
   overflow: visible;
+}
+/*---------------------FRONT CSS--------------------*/
+
+header {
+  background-color: #333;
+  padding: 10px 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left, .header-right {
+  display: flex;
+}
+
+.header-left {
+  /* Buttons on the left section (like 'Open Sidebar') */
+}
+
+.header-right {
+  /* Buttons on the right section */
+  gap: 10px; /* Add some space between the buttons */
+}
+
+header button {
+  border-radius: 5px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight:300;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color .25s
+}
+
+header button:hover {
+  color:#646cff;
+}
+
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: -250px;
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  transition: left 0.3s ease;
+}
+
+.app {
+  transition: margin-left 0.3s ease;
+}
+
+.app.sidebar-open main {
+  margin-left: 250px; /* Shift the main content to the right when sidebar is open */
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+}
+
+.sidebar .close-btn {
+  background-color: red;
+  font-size: 30px;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.sidebar .close-btn:hover {
+  background-color: #d32f2f;
 }
