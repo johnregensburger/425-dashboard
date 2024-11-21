@@ -34,28 +34,30 @@ db.serialize(() => {
         `
     );
 
-    db.run( /*TODO USER DATABASE? */
+    db.run(
         `
         CREATE TABLE IF NOT EXISTS Users (
             userId INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT,
             password TEXT
         )
-        ` // ^^^ Passwords should be hashed and salted, but that's a later problem
-    );      //is it?
+        `
+    );
 
     db.run(
         `
         CREATE TABLE IF NOT EXISTS UserLibrary (
             ownershipId INTEGER PRIMARY KEY AUTOINCREMENT,
-            FOREIGN KEY(userId) REFERENCES Users(userId),
-            FOREIGN KEY(gameId) REFERENCES Games(gameId),
+            userId INTEGER,
+            gameId INTEGER,
             username TEXT,
             gameName TEXT,
-            status TEXT
+            status TEXT,
+            FOREIGN KEY(userId) REFERENCES Users(userId),
+            FOREIGN KEY(gameId) REFERENCES Games(gameId)
         )
         ` // ^^^ status should be either "owned" or "wishlisted"
-    )
+    );
 });
 
 async function iterate() {
