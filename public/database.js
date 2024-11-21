@@ -48,13 +48,11 @@ db.serialize(() => {
         `
         CREATE TABLE IF NOT EXISTS UserLibrary (
             ownershipId INTEGER PRIMARY KEY AUTOINCREMENT,
-            userId INTEGER,
-            username TEXT,
-            gameId INTEGER,
-            gameName TEXT,
-            status TEXT,
             FOREIGN KEY(userId) REFERENCES Users(userId),
-            FOREIGN KEY(gameId) REFERENCES Games(gameId)
+            FOREIGN KEY(gameId) REFERENCES Games(gameId),
+            username TEXT,
+            gameName TEXT,
+            status TEXT
         )
         ` // ^^^ status should be either "owned" or "wishlisted"
     )
