@@ -5,8 +5,8 @@ const games = require("./gameCrud.js");
 
 // Creates a library entry based on the user and what game they've wishlisted or now own
 async function createEntry(userId, gameId, status) {
-    username = readUser(userId).username;
-    gameName = readGame(gameId).gameName;
+    username = users.readUser(userId).username;
+    gameName = games.readGame(gameId).gameName;
     try {
         db.run(
             `
