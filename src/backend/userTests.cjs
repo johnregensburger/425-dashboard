@@ -1,6 +1,7 @@
 const users = require("./userCrud.cjs");
 
 console.log("-=-=-=-=-=-=-=-=-=-=-=-=- USER TESTING BEGIN -=-=-=-=-=-=-=-=-=-=-=-=-");
+<<<<<<< HEAD
 //users.createUser("john", "msu");
 users.updateUser(1, "password", "csc");
 
@@ -51,3 +52,13 @@ users.deleteUser(1);*/
 //console.log(users.verifyLogin("johnr", "msu"));
 //users.deleteUser(1);
 //console.log(users.readUser(1));*/
+=======
+users.createUser("johnr", "msu");
+console.log(users.readUser(1));
+console.log(users.verifyLogin("johnr", "msu"));
+users.updateUser(1, "password", "csc");
+console.log(users.readUser(1));
+console.log(users.verifyLogin("johnr", "msu"));
+users.deleteUser(1);
+console.log(users.readUser(1));
+>>>>>>> b0177d2efd2cb558a94b5253ae04d50e58762958
