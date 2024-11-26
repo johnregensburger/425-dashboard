@@ -5,6 +5,7 @@ const Login = () => {
     console.log('Login component rendered!');
 
  const navigate = useNavigate();
+ 
  const username ='user'; //TEMP
  const password = 'pass'; //TEMP
 
@@ -21,9 +22,9 @@ const Login = () => {
      }));
   };
 
- const goToFront = () => { //navigate to front page  
+ const goToFront = () => { //navigate to front page logged in
     if(formData.username == username && formData.password == password) //REPLACE WITH USERCRUD THING
-        navigate('/front'); // Navigate to the Login page
+        navigate('/front');
 
     else {
         setFormData({ username: '', password: '' }); //resets it back to blank
@@ -31,39 +32,50 @@ const Login = () => {
     }
  };
 
+ const bypassFront = () => {
+    navigate('/front');     //navigate to front logged out
+ }
+
  const goTologinCreate = () => {
     navigate('/loginCreate'); //Navigate to create user page
  };
 
    return ( 
     <div className="container">
-    <div className="left">
-        <h1>DASHBOARD</h1>
-        <h2>Login</h2>
-        <button className="link" onClick={goTologinCreate}>Create Account</button>
-
-        <input className="text"
+  <div className="left">
+    <header className="content">
+      <button className="header" onClick={bypassFront}>DASHBOARD</button>
+    </header>
+    <div className="login-section">
+      <h2>Login</h2>
+      <button className="link" onClick={goTologinCreate}>
+        Create Account
+      </button>
+      <input
+        className="text"
         name="username"
-        type="text" 
-        value={formData.username} //refer to get,set array
-        onChange= {handleChange}
+        type="text"
+        value={formData.username}
+        onChange={handleChange}
         placeholder="Username"
-        />
-
-        <input className="text"
+      />
+      <input
+        className="text"
         name="password"
         type="password"
-        value={formData.password} //refer to get,set array
-        onChange= {handleChange}
+        value={formData.password}
+        onChange={handleChange}
         placeholder="Password"
-        />
-
-        <button className="submit" onClick={goToFront}>Submit</button>
+      />
+      <button className="submit" onClick={goToFront}>
+        Submit
+      </button>
     </div>
-    <div className="right">
-        <img src={bookshelf} alt="bookshelf"/>
-    </div>
-    </div>
+  </div>
+  <div className="right">
+    <img src={bookshelf} alt="bookshelf" />
+  </div>
+</div>
    );
  };
   export default Login;

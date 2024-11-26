@@ -1,3 +1,12 @@
+/*
+colors:
+main background: #39171E
+dark accent: #2D0F13
+light accent: #5F3536
+
+blue accent: #503CF6
+*/
+
 :root {
   font-family: system-ui, Helvetica, 'Times New Roman', Times, serif;
   line-height: 1.5;
@@ -5,7 +14,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #39171E;
 }
 
 /* General reset */
@@ -39,7 +48,7 @@ button.submit {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #2D0F13;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -59,75 +68,96 @@ button.link
 
 button.link:hover
 {
-  color:#646cff;
+  color:#503CF6;
 }
 
 button.submit:hover {
-  border-color: #646cff;
+  border-color: #503CF6;
 }
 
-button:focus,
-button:focus-visible {
-outline: 4px auto -webkit-focus-ring-color;
+button:active 
+{
+  border: none;
+  outline: none;
 }
 
-/* Main container - Flexbox layout for side-by-side sections */
+button:focus
+{
+  outline:none;
+}
+
 .container {
   display: flex;
   justify-content: space-between;
   height: 100vh;
 }
 
-/* Left section - where the button and stacked elements will be */
 .left {
-  width: 45%; 
+  width: 45%;
   padding: 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
   justify-content: center;
-  align-items: flex-start;
-  overflow-y: auto;
-  height:100vh;
+  align-items: center; 
+  height: 100vh;
+  background-color: #39171E;
 }
 
-/* Right section - image container */
-.right {
-  width: 55%;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #242424;
+/* Header spacing */
+header.content {
+  margin-bottom: 20px;
+  text-align: center;
+  color: white;
+  background-color:#39171E;
+  margin-bottom: 40px;
 }
 
-.right img {
-  width: 100%; /* Ensure image resizes with the container */
-  height: auto;
-}
-
-/* Style for dynamically added elements in the left section */
-.element {
+button.header
+{
+  font-size: 6em;
+  line-height: 1.1;
   padding: 10px;
-  margin: 5px 0;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  font-weight:300;
+  font-family: inherit;
+  cursor: pointer;
 }
 
-input.text {
+button.header:hover
+{
+  color: white; 
+}
+
+/* Login section layout */
+.login-section {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  gap: 5px; 
+  width: 100%; 
+  max-width: 400px;
+  padding: 20px; 
+  background-color: #39171E;
+  margin-bottom: 150px;
+}
+
+input.text
+{
   width: 300px;
   height: 30px;
   padding: 10px;
   margin: 8px 0;
-  background-color:darkslategrey;
-  border: 1px solid white;
+  background-color:#5F3536;
+  border: 1px solid #5F3536;
   border-radius: 5px;
   overflow: visible;
 }
+
 /*---------------------FRONT CSS--------------------*/
 
 header {
-  background-color: #333;
+  background-color: #2D0F13;
   padding: 10px 20px;
   color: white;
   display: flex;
@@ -167,7 +197,7 @@ header button:hover {
   position: fixed;
   top: 0;
   left: -250px;
-  background-color: #333;
+  background-color: #2D0F13;
   color: white;
   padding: 20px;
   transition: left 0.3s ease;
@@ -190,7 +220,7 @@ header button:hover {
 }
 
 .sidebar .close-btn {
-  background-color: red;
+  background-color: #503CF6;
   font-size: 15px;
   border: none;
   color: white;
@@ -199,7 +229,7 @@ header button:hover {
 }
 
 .sidebar .close-btn:hover {
-  background-color: #d32f2f;
+  background-color: #503CF6;
 }
 
 /*  SLIDER  */
@@ -256,8 +286,8 @@ input[type=range]::-webkit-slider-thumb:hover {
 }
 
 input[type=range]::-webkit-slider-thumb:active {
-  box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
-  -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+  box-shadow: inset 0 0 3px #503CF6, 0 0 9px #503CF6;
+  -webkit-box-shadow: inset 0 0 3px #503CF6, 0 0 9px #503CF6;
 }
 
 input[type="range"] {
@@ -266,7 +296,7 @@ input[type="range"] {
   height: 10px;
   width: 100%;
   position: absolute;
-  background-color: #646cff;
+  background-color: #503CF6;
   pointer-events: none;
 }
 
@@ -279,12 +309,12 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-runnable-track {
   background: linear-gradient(
     to right,
-    #646cff 0%,
-    #646cff var(--from-percent),
+    #503CF6 0%,
+    #503CF6 var(--from-percent),
     #e5e5e5 var(--from-percent),
     #e5e5e5 var(--to-percent),
-    #646cff var(--to-percent),
-    #646cff 100%
+    #503CF6 var(--to-percent),
+    #503CF6 100%
   );
 }
 
@@ -297,13 +327,14 @@ input[type="range"]::-webkit-slider-runnable-track {
   padding: 10px;
   max-height: 400px; /* Max height for scrollable area */
   overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-color: #5F3536 #2D0F13 ;
 }
 
 .grid-item {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background-color: #646cff;
+  background-color: #5F3536;
   color: white;
   border: none;
   padding: 0;
@@ -314,7 +345,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 
 .grid-item:hover {
-  background-color: #4a54e1;
+  background-color: #503CF6;
 }
 
 /* Image style */

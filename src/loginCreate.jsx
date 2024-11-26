@@ -28,8 +28,11 @@ const LoginCreate = () => {
    return ( 
     <div className="container">
     <div className="left">
-        <h1>DASHBOARD</h1>
-        <h2>Create a New Account</h2>
+    <header className="content">
+      <h1>DASHBOARD</h1>
+    </header>
+    <div className="login-section">
+      <h2>Create Your Account</h2>
         <input className="text"
         type="text"
         name="username"
@@ -55,6 +58,7 @@ const LoginCreate = () => {
         />
 
         <button className="submit" onClick={goBack}>Create Account</button>
+    </div>
     </div>
     <div className="right">
         <img src={bookshelf} alt="bookshelf"/>

@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-const Front = () => {
 
-const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-const [fromValue, setFromValue] = React.useState(1);
-const [toValue, setToValue] = React.useState(8);
-
-
-const toggleSidebar = () => {
-  setIsSidebarOpen(prevState => !prevState);
-};
-
-const fromPercent = (fromValue / 100) * 100;
-const toPercent = (toValue / 100) * 100;
+const Library = () => {
+    console.log('Login component rendered!');
 
  const navigate = useNavigate();
+ 
+ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+ const [fromValue, setFromValue] = React.useState(1);
+ const [toValue, setToValue] = React.useState(8);
+ const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- const logOut = () => {
-  setIsLoggedIn((prevState) => !prevState);
-   navigate('/'); // Navigate to the Login page
- };
+ const fromPercent = (fromValue / 100) * 100;
+ const toPercent = (toValue / 100) * 100;
 
- const logIn = () => {
-  navigate('/'); // Navigate to the Login page
- }
+ const goToFront = () => { //navigate to front page  
+        navigate('/front');
+    }
 
- const goToLibrary = () => {
-  navigate('/library');
- }
-
- console.log('Front Page component rendered!');
+const logOut = () => {
+    setIsLoggedIn((prevState) => !prevState);
+        navigate('/'); // Navigate to the Login page
+    };
+    
+    const logIn = () => {
+    navigate('/'); // Navigate to the Login page
+    }
+    
+    const toggleSidebar = () => {
+        setIsSidebarOpen(prevState => !prevState);
+    };
+    
    return ( 
-     <div className={`app ${isSidebarOpen ? "sidebar-open" : ""}`}>
+    <div className={`app ${isSidebarOpen ? "sidebar-open" : ""}`}>
       {/* Header Section */}
       <header>
         <div className="header-left">
@@ -41,16 +41,10 @@ const toPercent = (toValue / 100) * 100;
           </button>
         </div>
         <div className="header-right">
+        <button className="header-btn" onClick={goToFront}>
+          Database
+        </button>
         {isLoggedIn ? (
-            <button className="header-btn" onClick={goToLibrary}>
-                Library {/* Is Logged in */}
-            </button>
-            ) : (
-              <button className="header-btn" onClick={logIn}>
-                Library {/* Is Logged OUT */}
-              </button>
-            )}
-          {isLoggedIn ? (
             <button className="header-btn" onClick={logOut}>
               Log Out
             </button>
@@ -61,7 +55,7 @@ const toPercent = (toValue / 100) * 100;
             )}
         </div>
       </header>
-
+    
       {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <button className="close-btn" onClick={toggleSidebar}>
@@ -98,22 +92,10 @@ const toPercent = (toValue / 100) * 100;
           </div>
         </div>
       </div>
+    <main>
 
-      {/* Main Content*/}
-      <main>
-        <h1>Dashboard Game Database</h1>
-        {/* Container for the scrollable button grid */}
-        <div className="button-grid">
-          {[...Array(20)].map((_, index) => (
-            <button key={index} className="grid-item">
-              <img src={`https://via.placeholder.com/150`} alt={`Game ${index + 1}`} className="grid-item-img" />
-              <span className="grid-item-text">Game {index + 1}</span>
-            </button>
-          ))}
-        </div>
-      </main>
-    </div>
-    
+    </main>
+  </div>
    );
  };
-  export default Front;
+  export default Library;
