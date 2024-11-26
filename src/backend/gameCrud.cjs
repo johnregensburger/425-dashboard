@@ -3,8 +3,7 @@ const db = require("./database.cjs");
 
 // Create new game with all necessary information
 async function createGame(gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age) {
-    try {
-        const hashedPassword = await encryptPassword(password);
+    await new Promise((resolve, reject) => {
         db.run(
             `
             INSERT OR IGNORE INTO Games (gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age)
@@ -13,33 +12,35 @@ async function createGame(gameName, description, leadDesigner, publisher, boxArt
             [gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age],
             function (e) {
                 if (e) {
-                    console.log(`ERR: Game creation failed. See below:`);
-                    console.error(e.message);
-                } else {
-                    console.log(`Inserted game`);
+                    return reject(e);
                 }
+                console.log("Game " + gameName + " created");
+                resolve();
             }
         );
-    } catch (e) {
-        console.error(e.message);
-    }
+    });    
 }
 
 // Return a game with specified ID
 async function readGame(id) {
     return new Promise((resolve, reject) => {
-        db.get(`
+        db.get(
+            `
             SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
             FROM Games
-            WHERE userId = ?`, [id], (err, row) => {
-            if (err) {
-                console.log(`ERR: Game read failed. See below:`);
-                console.error(err.message);
-                reject(err);
-            } else {
-                resolve(row);
+            WHERE userId = ?
+            `,
+            [id],
+            function (e, row) {
+                if (e) {
+                    reject(e); // Reject if there's an error
+                } else if (row) {
+                    resolve(row); // Resolve with the row data if found
+                } else {
+                    reject(new Error("Game not found")); // Reject if no game is found
+                }
             }
-        });
+        );
     });
 }
 
