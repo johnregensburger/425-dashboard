@@ -8,136 +8,10 @@ async function encryptPassword(password) {
     return await bcrypt.hash(password, saltRounds);
 }
 
-// Create new user with specified username and password
-async function createUser(username, password) {
-    const hashedPassword = await encryptPassword(password);
-    await new Promise((resolve, reject) => {
-        db.run(
-            `
-            INSERT OR IGNORE INTO Users (username, password)
-            VALUES (?, ?)
-            `,
-            [username, hashedPassword],
-            function (e) {
-                if (e) {
-                    return reject(e);
-                }
-                console.log("User " + username + " created");
-                resolve();
-            }
-        );
-    });    
-}
-
-async function readUser(id) {
-    // Should run the following SQLite query with the corresponding parameters
-    // Should return the userId, username, and (hashed) password of a user
-    return new Promise((resolve, reject) => {
-        db.get(
-            `
-            SELECT userId, username, password
-            FROM Users
-            WHERE userId = ?
-            `,
-            [id],
-            function (e, row) {
-                if (e) {
-                    reject(e); // Reject if there's an error
-                } else if (row) {
-                    resolve(row); // Resolve with the row data if found
-                } else {
-                    reject(new Error('User not found')); // Reject if no user is found
-                }
-            }
-        );
-    });
-}
-
-async function updateUser(id, column, newValue) {
-    if (column == "password") {
-        newValue = await encryptPassword(newValue);
-    }
-    await new Promise((resolve, reject) => {
-        db.run(
-            `
-            UPDATE Users SET ${column} = ? WHERE userId = ?
-            `,
-            [newValue, id],
-            function (e) {
-                if (e) {
-                    return reject(e);
-                }
-                console.log(column + " of user at ID " + id + " updated to " + newValue);
-                resolve();
-            }
-        );
-    });
-}
-
-async function deleteUser(id) {
-    // Should run the following SQLite query with the corresponding parameters
-    await new Promise((resolve, reject) => {
-        db.run(
-            `
-            DELETE FROM Users
-            WHERE userId = ?
-            `,
-            [id],
-            function (e) {
-                if (e) {
-                    reject(e);
-                }
-                console.log("Deleted user at ID " + id);
-                resolve();
-            }
-        );
-    });
-}
-
-// TODO: Fix
-async function verifyLogin(username, password) {
-    const hashedPassword = await encryptPassword(password);
-
-    // Should run the following SQLite query with the corresponding parameters
-    // Should compare the results of the query to the login attempt
-    db.get(
-        `
-        SELECT password FROM Users
-        WHERE username = ?
-        `,
-        [username]
-    );
-}
-
-module.exports = {
-    createUser,
-    readUser,
-    updateUser,
-    deleteUser,
-    verifyLogin
-};
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-// Encrypts password
-async function encryptPassword(password) {
-    return await bcrypt.hash(password, saltRounds);
-}
-
 // Verifies user login
 async function verifyLogin(username, password) {
     return await new Promise((resolve, reject) => {
-        dbGet(
+        db.get(
             `
             SELECT password FROM Users
             WHERE username = ?
@@ -195,18 +69,20 @@ async function createUser(username, password) {
 
 // Reads user by searching for ID
 async function readUser(id) {
-    try {
-        const user = await dbGet(
-            `SELECT userId, username, password
-             FROM Users
-             WHERE userId = ?`,
-            [id]
-        );
-        return user; // Return the fetched user
-    } catch (e) {
-        console.error('Error fetching user:', e);
-        throw error; // Re-throw the error to handle it further up if necessary
-    }
+    return new Promise((resolve, reject) => {
+        db.get(`
+            SELECT userId, username, password
+            FROM Users
+            WHERE userId = ?`, [id], (err, row) => {
+            if (err) {
+                console.log(`ERR: User read failed. See below:`);
+                console.error(err.message);
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
 }
 
 
