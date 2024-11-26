@@ -29,11 +29,10 @@ async function createUser(username, password) {
     });    
 }
 
-// TODO: Fix
 async function readUser(id) {
     // Should run the following SQLite query with the corresponding parameters
     // Should return the userId, username, and (hashed) password of a user
-    await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         db.get(
             `
             SELECT userId, username, password
