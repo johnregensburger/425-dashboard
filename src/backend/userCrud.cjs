@@ -29,6 +29,7 @@ async function createUser(username, password) {
     });    
 }
 
+// TODO: Fix
 async function readUser(id) {
     // Should run the following SQLite query with the corresponding parameters
     // Should return the userId, username, and (hashed) password of a user
@@ -94,6 +95,7 @@ async function deleteUser(id) {
     });
 }
 
+// TODO: Fix
 async function verifyLogin(username, password) {
     const hashedPassword = await encryptPassword(password);
 
