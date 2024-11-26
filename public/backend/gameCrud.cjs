@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
-const db = require("./database.js");
+const db = require("./database.cjs");
 
 // Create new game with all necessary information
 async function createGame(gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age) {

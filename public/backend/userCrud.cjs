@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
-const db = require("./database.js");
+const db = require("./database.cjs");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -8,9 +8,34 @@ async function encryptPassword(password) {
     return await bcrypt.hash(password, saltRounds);
 }
 
-// Verifies passwords
-async function verifyPassword(plaintextPassword, hashedPassword) {
-    return await bcrypt.compare(plaintextPassword, hashedPassword);
+// Verifies user login
+async function verifyLogin(username, password) {
+    return new Promise((resolve, reject) => {
+        db.get(
+            `
+            SELECT password FROM Users
+            WHERE username = ?
+            `,
+            [username],
+            (err, row) => {
+                if (err) {
+                    console.log(`ERR: User verification failed. See below:`);
+                    console.error(err.message);
+                    reject(err);
+                } else if (!row) {
+                    resolve(false); // User not found
+                } else {
+                    // Compare the provided password with the hashed password
+                    bcrypt.compare(password, row.password)
+                        .then(isMatch => resolve(isMatch))
+                        .catch(compareErr => {
+                            console.error(compareErr.message);
+                            reject(compareErr);
+                        });
+                }
+            }
+        );
+    });
 }
 
 // Creates a new user with specified username and password
@@ -90,13 +115,15 @@ module.exports = {
     createUser,
     readUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    verifyLogin
 };
 
-console.log("-=-=-=-=-=-=-=-=-=-=-=-=- TESTING BEGIN -=-=-=-=-=-=-=-=-=-=-=-=-");
+/*console.log("-=-=-=-=-=-=-=-=-=-=-=-=- TESTING BEGIN -=-=-=-=-=-=-=-=-=-=-=-=-");
 createUser("johnr", "msu");
-console.log(readUser(1));
+console.log(verifyLogin("johnr", "msu"));
 updateUser(1, "password", "csc");
 console.log(readUser(1));
+console.log(verifyLogin("johnr", "msu"));
 deleteUser(1);
-console.log(readUser(1));
+console.log(readUser(1));*/

@@ -1,7 +1,7 @@
 const sqlite3 = require("sqlite3").verbose();
-const db = require("./database.js");
-const users = require("./userCrud.js");
-const games = require("./gameCrud.js");
+const db = require("./database.cjs");
+const users = require("./userCrud.cjs");
+const games = require("./gameCrud.cjs");
 
 // Creates a library entry based on the user and what game they've wishlisted or now own
 async function createEntry(userId, gameId, status) {
