@@ -4,10 +4,16 @@ const Front = () => {
 
 const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const [fromValue, setFromValue] = React.useState(10);
+const [toValue, setToValue] = React.useState(40);
+
 
 const toggleSidebar = () => {
   setIsSidebarOpen(prevState => !prevState);
 };
+
+const fromPercent = (fromValue / 100) * 100;
+const toPercent = (toValue / 100) * 100;
 
  const navigate = useNavigate();
 
@@ -56,21 +62,58 @@ const toggleSidebar = () => {
         </div>
       </header>
 
-      {/* Sidebar*/}
-      <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
+      {/* Sidebar */}
+      <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <button className="close-btn" onClick={toggleSidebar}>
           ×
         </button>
-        <h2>Sidebar</h2>
-        <p>Some content here...</p>
+        <h2>Filter</h2>
+        <h3>Player Number</h3>
+        <div className="range_container">
+          <div className="sliders_control">
+            <input
+              id="fromSlider"
+              type="range"
+              value={fromValue}
+              min="1"
+              max="8"
+              step="1"
+              aria-label="Minimum player number"
+              onChange={(e) => setFromValue(Math.min(e.target.value, toValue - 1))}
+            />
+            <input
+              id="toSlider"
+              type="range"
+              value={toValue}
+              min="1"
+              max="8"
+              step="1"
+              aria-label="Maximum player number"
+              onChange={(e) => setToValue(Math.max(e.target.value, fromValue + 1))}
+            />
+          </div>
+          <div className="form_control">
+            <span>Min: {fromValue}</span>
+            <span>Max: {toValue}</span>
+          </div>
+        </div>
       </div>
 
       {/* Main Content*/}
       <main>
-        <h1>Welcome to the Webpage</h1>
-        <p>Here you can see a header with buttons and a popup sidebar on the left.</p>
+        <h1>Dashboard Game Database</h1>
+        {/* Container for the scrollable button grid */}
+        <div className="button-grid">
+          {[...Array(20)].map((_, index) => (
+            <button key={index} className="grid-item">
+              <img src={`https://via.placeholder.com/150`} alt={`Game ${index + 1}`} className="grid-item-img" />
+              <span className="grid-item-text">Game {index + 1}</span>
+            </button>
+          ))}
+        </div>
       </main>
     </div>
+    
    );
  };
   export default Front;

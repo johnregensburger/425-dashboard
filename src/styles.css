@@ -139,12 +139,9 @@ header {
   display: flex;
 }
 
-.header-left {
-  /* Buttons on the left section (like 'Open Sidebar') */
-}
+/* .header-left {} */
 
 .header-right {
-  /* Buttons on the right section */
   gap: 10px; /* Add some space between the buttons */
 }
 
@@ -194,7 +191,7 @@ header button:hover {
 
 .sidebar .close-btn {
   background-color: red;
-  font-size: 30px;
+  font-size: 15px;
   border: none;
   color: white;
   padding: 5px 10px;
@@ -203,4 +200,135 @@ header button:hover {
 
 .sidebar .close-btn:hover {
   background-color: #d32f2f;
+}
+
+/*  SLIDER  */
+.sidebar h3 {
+  margin-bottom: 10px; /* Reduce the space below the header */
+  font-size: 1.5em; /* Adjust size if needed */
+  color: #ffffff; /* Ensure text color matches sidebar theme */
+}
+
+.range_container {
+  margin-top: 10px; /* Reduce space between the header and the slider container */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Adds space between elements within the container */
+}
+
+.sliders_control {
+  position: relative;
+  min-height: 10px;
+}
+
+.form_control {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  margin-top: 5px;
+  color: #C6C6C6;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: all;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #C6C6C6;
+  cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+  -webkit-appearance: none;
+  pointer-events: all;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #C6C6C6;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  background: #f7f7f7;
+}
+
+input[type=range]::-webkit-slider-thumb:active {
+  box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+  -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 10px;
+  width: 100%;
+  position: absolute;
+  background-color: #646cff;
+  pointer-events: none;
+}
+
+#fromSlider {
+  height: 0;
+  z-index: 1;
+  top: 5px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    #646cff 0%,
+    #646cff var(--from-percent),
+    #e5e5e5 var(--from-percent),
+    #e5e5e5 var(--to-percent),
+    #646cff var(--to-percent),
+    #646cff 100%
+  );
+}
+
+/*  MAIN CONTENT  */
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Auto-fill with minimum width of 150px */
+  gap: 20px;
+  padding: 10px;
+  max-height: 400px; /* Max height for scrollable area */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  overflow: hidden; /* Hide overflowing content */
+}
+
+.grid-item:hover {
+  background-color: #4a54e1;
+}
+
+/* Image style */
+.grid-item-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover; /* Makes the image cover the container */
+}
+
+/* Text inside the button */
+.grid-item-text {
+  background-color: transparent; /* Semi-transparent background */
+  padding: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
 }
