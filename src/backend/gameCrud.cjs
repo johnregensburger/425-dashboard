@@ -3,8 +3,7 @@ const db = require("./database.cjs");
 
 // Create new game with all necessary information
 async function createGame(gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age) {
-    try {
-        const hashedPassword = await encryptPassword(password);
+    await new Promise((resolve, reject) => {
         db.run(
             `
             INSERT OR IGNORE INTO Games (gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age)
@@ -13,16 +12,13 @@ async function createGame(gameName, description, leadDesigner, publisher, boxArt
             [gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age],
             function (e) {
                 if (e) {
-                    console.log(`ERR: Game creation failed. See below:`);
-                    console.error(e.message);
-                } else {
-                    console.log(`Inserted game`);
+                    return reject(e);
                 }
+                console.log("Game " + gameName + " created");
+                resolve();
             }
         );
-    } catch (e) {
-        console.error(e.message);
-    }
+    });    
 }
 
 // Return a game with specified ID
