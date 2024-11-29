@@ -43,11 +43,18 @@ const LoginCreate = () => {
 
     try {
       console.log("Sending request to create user...");
-      const response = await fetch('http://localhost:5173/database', {
-        username,
-        password,
+      const response = await fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
       });
-
+    
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    
       console.log("Response:", response);
       alert('Account created. Please log in.');
       navigate('/'); // Navigate to the Login page
