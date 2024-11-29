@@ -2,6 +2,7 @@
 // 11/29 JH
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const users = require('./userCrud.cjs');
 const games = require('./gameCrud.cjs');
@@ -12,6 +13,9 @@ const port = 3000;
 
 // Use the Body-parser middleware to parse incoming HTTP requests
 app.use(bodyParser.json());
+
+// Use CORS as well
+app.use(cors());
 
 // USER ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
