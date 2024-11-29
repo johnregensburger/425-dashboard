@@ -2,7 +2,7 @@
 const sqlite3 = require("sqlite3").verbose();
 
 // Create and connect database
-let db = new sqlite3.Database("dashboard.db", (e) => {
+let db = new sqlite3.Database("src/backend/dashboard.db", (e) => {
     if (e) {
         console.error(e.message);
     } else {
