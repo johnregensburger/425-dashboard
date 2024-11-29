@@ -6,7 +6,6 @@ import Login from './login.jsx'
 import Front from './front.jsx'
 import Create from './loginCreate.jsx'
 import Library from './library.jsx'
-console.log('Rendering main.jsx');
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

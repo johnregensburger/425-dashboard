@@ -2,16 +2,12 @@ import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import bookshelf from './assets/bookshelf_425.png'
 const Login = () => {
-    console.log('Login component rendered!');
 
  const navigate = useNavigate();
- 
- const username ='user'; //TEMP
- const password = 'pass'; //TEMP
 
   const [formData, setFormData] = useState({
      username: '',  //sets the automatic formdata to be blank
-    password: '',   //so we can reset it easily
+     password: '',   //so we can reset it easily
   });
 
    const handleChange = (event) => { //handles change in text box
@@ -22,17 +18,7 @@ const Login = () => {
      }));
   };
 
- const goToFront = () => { //navigate to front page logged in
-    if(formData.username == username && formData.password == password) //REPLACE WITH USERCRUD THING
-        navigate('/front');
-
-    else {
-        setFormData({ username: '', password: '' }); //resets it back to blank
-        alert("Invalid Login");
-    }
- };
-
- const bypassFront = () => {
+  const bypassLogin = () => {
     navigate('/front');     //navigate to front logged out
  }
 
@@ -40,11 +26,41 @@ const Login = () => {
     navigate('/loginCreate'); //Navigate to create user page
  };
 
+ const validateLogin = async () => { 
+    try {
+      console.log("Sending request to validate user...");
+
+      const response = await fetch('http://localhost:3000/users/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: formData.username, password: formData.password }),
+      });
+      console.log(response);  
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          alert("Invalid Login");
+          setFormData({ username: '', password: '' }); // Reset form on invalid login
+          return;
+        }
+        throw new Error(`Server error: ${response.statusText}`);
+      }
+      console.log("User validated:", result);
+        navigate('/front');      
+
+    } catch(error) {
+        console.error('Error validating login:', error);
+        alert(`Error: ${error.message || 'Unknown Error'}`);
+    }
+  };
+
    return ( 
     <div className="container">
   <div className="left">
     <header className="content">
-      <button className="header" onClick={bypassFront}>DASHBOARD</button>
+      <button className="header" onClick={bypassLogin}>DASHBOARD</button>
     </header>
     <div className="login-section">
       <h2>Login</h2>
@@ -67,7 +83,7 @@ const Login = () => {
         onChange={handleChange}
         placeholder="Password"
       />
-      <button className="submit" onClick={goToFront}>
+      <button className="submit" onClick={validateLogin}>
         Submit
       </button>
     </div>

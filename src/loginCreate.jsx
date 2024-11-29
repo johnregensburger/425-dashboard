@@ -54,10 +54,9 @@ const LoginCreate = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-    
-      console.log("Response:", response);
       alert('Account created. Please log in.');
       navigate('/'); // Navigate to the Login page
+      
     } catch(error) {
       console.error('user creation error:', error);
 

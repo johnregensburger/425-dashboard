@@ -36,7 +36,7 @@ app.post('/users', async (req, res) => {
 });
 
 // Read or fetch user (by ID)
-app.get('/users/:id', async (req, res) => {
+app.get('/users/read/:id', async (req, res) => {
     try {
         const user = await users.readUser(req.params.id);
         if (user) {
@@ -74,6 +74,33 @@ app.delete('/users/:id', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+//Validate user
+app.post('/users/validate', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        console.log("Verifying login...");
+        const isValid = await verifyLogin(username, password);
+        if (!isValid) {
+            return res.status(401).send('Invalid username or password');
+        }
+
+        // If valid, respond with success
+        res.json({ message: 'Login successful' });
+    } catch (error) {
+        if (error.message === "User not found") {
+            // Handle specific error when the user is not found
+            return res.status(401).send('Invalid username or password');
+        }   
+        // For other errors, send a 500 response
+        console.error("Error validating login:", error.message);
+        res.status(500).send('Internal server error');
+    }
+});
+
+//Assign token
+
 
 // GAME ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 

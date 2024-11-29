@@ -92,12 +92,8 @@ async function deleteUser(id) {
     });
 }
 
-// TODO: Fix
 async function verifyLogin(username, password) {
-    const hashedPassword = await encryptPassword(password);
-
-    // Should run the following SQLite query with the corresponding parameters
-    // Should compare the results of the query to the login attempt
+    try{
     const user = await new Promise((resolve, reject) => {
         db.get(
             `
@@ -105,24 +101,25 @@ async function verifyLogin(username, password) {
             WHERE username = ?
             `,
             [username],
-            function (e, row) {
+            (e, row) => {
                 if (e) {
                     reject(e); // Reject if there's an error
-                } else if (row) {
-                    resolve(row); // Resolve with the row data if found
-                } else {
-                    reject(new Error("User not found")); // Reject if no user is found
                 }
+                if (!row) {
+                    return reject(new Error("User not found")); // Reject if user is not found
+                }
+                resolve(row);
             }
         );
     });
-    // Compare the provided password with the hashed password
-    bcrypt.compare(password, row.password)
-        .then(isMatch => resolve(isMatch))
-        .catch(compareErr => {
-            console.error(compareErr.message);
-            reject(compareErr);
-        });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log("Match: " + isMatch);
+    return isMatch; // Return whether the password matches
+    }catch(e) {
+        console.error(e.message);
+        throw e;
+    }
 }
 
 module.exports = {
