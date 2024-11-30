@@ -26,32 +26,30 @@ const Login = () => {
     navigate('/loginCreate'); //Navigate to create user page
  };
 
- const validateLogin = async () => { 
+ const validateLogin = async (e) => { 
+  e.preventDefault();
+
+  const user = formData.username;
+  const pass = formData.password;
+  
     try {
       console.log("Sending request to validate user...");
-
-      const response = await fetch('http://localhost:3000/users/validate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: formData.username, password: formData.password }),
-      });
-      console.log(response);  
+      const response = await fetch(`/users/validate?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`);
       
+      const data = await response.json();
+
       if (!response.ok) {
-        if (response.status === 401) {
-          alert("Invalid Login");
-          setFormData({ username: '', password: '' }); // Reset form on invalid login
-          return;
-        }
-        throw new Error(`Server error: ${response.statusText}`);
+        setMessage(data.error || 'Invalid username or password'); // Error
       }
+
+      setMessage(data.message); // Login successful
       console.log("User validated:", result);
-        navigate('/front');      
+
+      alert(`Welcome, ${result.username}!`);
+      navigate('/front');     
 
     } catch(error) {
-        console.error('Error validating login:', error);
+        console.error('Error:', error);
         alert(`Error: ${error.message || 'Unknown Error'}`);
     }
   };

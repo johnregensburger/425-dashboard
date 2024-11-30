@@ -97,7 +97,7 @@ async function verifyLogin(username, password) {
     const user = await new Promise((resolve, reject) => {
         db.get(
             `
-            SELECT password FROM Users
+            SELECT username, password FROM Users
             WHERE username = ?
             `,
             [username],
@@ -112,11 +112,11 @@ async function verifyLogin(username, password) {
             }
         );
     });
-
     const isMatch = await bcrypt.compare(password, user.password);
     console.log("Match: " + isMatch);
     return isMatch; // Return whether the password matches
-    }catch(e) {
+    } 
+        catch(e) {
         console.error(e.message);
         throw e;
     }

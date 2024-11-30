@@ -8,19 +8,19 @@ const users = require('./userCrud.cjs');
 const games = require('./gameCrud.cjs');
 const library = require('./libraryCrud.cjs');
 
-const app = express();
+const exp = express();
 const port = 3000;
 
 // Use the Body-parser middleware to parse incoming HTTP requests
-app.use(bodyParser.json());
+exp.use(bodyParser.json());
 
 // Use CORS as well
-app.use(cors());
+exp.use(cors());
 
 // USER ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 // Create user
-app.post('/users', async (req, res) => {
+exp.post('/users', async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -36,7 +36,7 @@ app.post('/users', async (req, res) => {
 });
 
 // Read or fetch user (by ID)
-app.get('/users/read/:id', async (req, res) => {
+exp.get('/users/read/:id', async (req, res) => {
     try {
         const user = await users.readUser(req.params.id);
         if (user) {
@@ -50,7 +50,7 @@ app.get('/users/read/:id', async (req, res) => {
 });
 
 // Update user
-app.put('/users/:id', async (req, res) => {
+exp.put('/users/:id', async (req, res) => {
     const { column, newValue } = req.body;
 
     if (!column || !newValue) {
@@ -66,7 +66,7 @@ app.put('/users/:id', async (req, res) => {
 });
 
 // Delete user
-app.delete('/users/:id', async (req, res) => {
+exp.delete('/users/:id', async (req, res) => {
     try {
         await users.deleteUser(req.params.id);
         res.status(200).json({ message: 'User deleted successfully' });
@@ -76,26 +76,25 @@ app.delete('/users/:id', async (req, res) => {
 });
 
 //Validate user
-app.post('/users/validate', async (req, res) => {
-    const { username, password } = req.body;
+exp.get('/users/validate', async (req, res) => {
+    const { username, password } = req.query;
 
     try {
-        console.log("Verifying login...");
         const isValid = await verifyLogin(username, password);
         if (!isValid) {
-            return res.status(401).send('Invalid username or password');
+            return res.status(401).json('Invalid username or password');
         }
 
         // If valid, respond with success
-        res.json({ message: 'Login successful' });
+        res.send({ message: 'Login successful' });
+
     } catch (error) {
         if (error.message === "User not found") {
-            // Handle specific error when the user is not found
-            return res.status(401).send('Invalid username or password');
+            return res.status(401).json('Invalid username or password');
         }   
         // For other errors, send a 500 response
         console.error("Error validating login:", error.message);
-        res.status(500).send('Internal server error');
+        res.status(500).json('Internal server error');
     }
 });
 
@@ -110,6 +109,6 @@ app.post('/users/validate', async (req, res) => {
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 // Start the server
-app.listen(port, () => {
+exp.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });
