@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import bookshelf from './assets/bookshelf_425.png'
 const Login = () => {
@@ -9,6 +9,9 @@ const Login = () => {
      username: '',  //sets the automatic formdata to be blank
      password: '',   //so we can reset it easily
   });
+
+  const [message, setMessage] = useState(''); 
+
 
    const handleChange = (event) => { //handles change in text box
     const { name, value } = event.target;
@@ -27,32 +30,46 @@ const Login = () => {
  };
 
  const validateLogin = async (e) => { 
-  e.preventDefault();
+    e.preventDefault();
 
-  const user = formData.username;
-  const pass = formData.password;
-  
+    const user = formData.username;
+    const pass = formData.password;
+
+    if (!user || !pass) {
+      setMessage('Username and password are required');
+      return;
+    }
+    
     try {
       console.log("Sending request to validate user...");
-      const response = await fetch(`http://localhost:3000/users/validate?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`);
+
+
+      const response = await fetch(`http://localhost:3000/users/verify-login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: user, password: pass }),
+      });
       
       const data = await response.json();
 
       if (!response.ok) {
         setMessage(data.error || 'Invalid username or password'); // Error
+        return;
       }
 
       setMessage(data.message); // Login successful
-      console.log("User validated:", result);
+      console.log("User validated:", data);
 
-      alert(`Welcome, ${result.username}!`);
+      alert(`Welcome, ${data.username}!`);
       navigate('/front');     
 
     } catch(error) {
-        console.error('Error:', error);
-        alert(`Error: ${error.message || 'Unknown Error'}`);
+      console.error('Error:', error);
+      alert(`Error: ${error.message || 'Unknown Error'}`);
     }
-  };
+ };
 
    return ( 
     <div className="container">

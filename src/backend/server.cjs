@@ -74,30 +74,30 @@ exp.delete('/users/:id', async (req, res) => {
     }
 });
 
-//Validate user
-exp.get('/users/validate-login', async (req, res) => {
-    const { username, password } = req.query;
+// Validate user
+exp.post('/users/verify-login', async (req, res) => {
+    const { username, password } = req.body;
 
     try {
-        const isValid = await verifyLogin(username, password);
+        const isValid = await users.verifyLogin(username, password);
         if (!isValid) {
-            return res.status(401).json('Invalid username or password');
+            return res.status(401).json({ error: 'Invalid username or password' });
         }
 
         // If valid, respond with success
-        res.send({ message: 'Login successful' });
+        res.json({ message: 'Login successful', username });
 
     } catch (error) {
         if (error.message === "User not found") {
-            return res.status(401).json('Invalid username or password');
+            return res.status(401).json({ error: 'Invalid username or password' });
         }   
         // For other errors, send a 500 response
         console.error("Error validating login:", error.message);
-        res.status(500).json('Internal server error');
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-//Assign token
+// Assign token
 
 
 // GAME ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
