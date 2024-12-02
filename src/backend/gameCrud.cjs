@@ -97,25 +97,29 @@ async function filterReadGame(filter) {
 }
 
 async function filterPlayerNumber(min, max) {
-    return new Promise((resolve, reject) => {
-        db.all(
-            `
-            SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
-            FROM Games
-            WHERE minPlayers >= ? AND maxPlayers <=?
-            `,
-            [min, max],
-            function(e, results) {
-                if (e) {
-                    reject(e);
-                } else if (results) {
-                    resolve(results);
-                } else {
-                    reject(new Error("No games found"));
+    if (min > max) {
+        console.error("Minimum players is greater than maximum players. Please adjust and try again.");
+    } else {
+        return new Promise((resolve, reject) => {
+            db.all(
+                `
+                SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+                FROM Games
+                WHERE minPlayers >= ? AND maxPlayers <=?
+                `,
+                [min, max],
+                function(e, results) {
+                    if (e) {
+                        reject(e);
+                    } else if (results) {
+                        resolve(results);
+                    } else {
+                        reject(new Error("No games found"));
+                    }
                 }
-            }
-        );
-    });
+            );
+        });
+    }
 }
 
 // Update a column of a game at specified ID with a new value
