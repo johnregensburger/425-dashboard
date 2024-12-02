@@ -34,7 +34,7 @@ const Login = () => {
   
     try {
       console.log("Sending request to validate user...");
-      const response = await fetch(`/users/validate?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`);
+      const response = await fetch(`http://localhost:3000/users/validate?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`);
       
       const data = await response.json();
 
