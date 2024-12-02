@@ -1,12 +1,11 @@
 // Express server that defines HTTP routes or endpoints for all CRUD operations
-// 11/29 JH
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const users = require('./userCrud.cjs');
 const games = require('./gameCrud.cjs');
-const library = require('./libraryCrud.cjs');
+const libraries = require('./libraryCrud.cjs');
 
 const exp = express();
 const port = 3000;
@@ -36,7 +35,7 @@ exp.post('/users', async (req, res) => {
 });
 
 // Read or fetch user (by ID)
-exp.get('/users/read/:id', async (req, res) => {
+exp.get('/users/:id', async (req, res) => {
     try {
         const user = await users.readUser(req.params.id);
         if (user) {
@@ -76,7 +75,7 @@ exp.delete('/users/:id', async (req, res) => {
 });
 
 //Validate user
-exp.get('/users/validate', async (req, res) => {
+exp.get('/users/validate-login', async (req, res) => {
     const { username, password } = req.query;
 
     try {
@@ -103,8 +102,122 @@ exp.get('/users/validate', async (req, res) => {
 
 // GAME ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
+// Create game
+exp.post('/games', async (req, res) => {
+    const { gameName, description, leadDesigner, publisher, boxArtUrl, 
+        releaseDate, minPlayers, maxPlayers, playTime, age } = req.body;
+    
+    if (!gameName || !description || !leadDesigner || !publisher || 
+        !boxArtUrl || !releaseDate || !minPlayers || !maxPlayers || 
+        !playTime || !age) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    try {
+        await games.createGame(gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age);
+        res.status(201).json({ message: 'Game created successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Read or fetch game
+exp.get('/games/:id', async (req, res) => {
+    try {
+        const game = await games.readGame(req.params.id);
+        if (game) {
+            res.json(game);
+        } else {
+            res.status(404).send('Game not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Update game
+exp.put('/games/:id', async (req, res) => {
+    const { column, newValue } = req.body;
+
+    if (!column || !newValue) {
+        return res.status(400).json({ error: 'Column and newValue are required' });
+    }
+
+    try {
+        await games.updateGame(req.params.id, column, newValue);
+        res.status(200).json({ message: 'Game updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Delete game
+exp.delete('/games/:id', async (req, res) => {
+    try {
+        await games.deleteGame(req.params.id);
+        res.status(200).json({ message: 'Game deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 // LIBRARY ENDPOINTS -=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=--=-=- //
+
+// Create library entry
+exp.post('/libraries', async (req, res) => {
+    const { userId, gameId, status } = req.body;
+
+    if (!userId || !gameId || !status) {
+        return res.status(400).json({ error: 'UserId, gameId, and status are required' });
+    }
+
+    try {
+        await libraries.createEntry(userId, gameId, status);
+        res.status(201).json({ message: 'Library entry created successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Read or fetch library entry (by ID)
+exp.get('/libraries/:id', async (req, res) => {
+    try {
+        const entry = await libraries.readEntry(req.params.id);
+        if (entry) {
+            res.json(entry);
+        } else {
+            res.status(404).send('Library entry not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Update library entry
+exp.put('/libraries/:id', async (req, res) => {
+    const { column, newValue } = req.body;
+
+    if (!column || !newValue) {
+        return res.status(400).json({ error: 'Column and newValue are required' });
+    }
+
+    try {
+        await libraries.updateEntry(req.params.id, column, newValue);
+        res.status(200).json({ message: 'Library entry updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Delete library entry
+exp.delete('/libraries/:id', async (req, res) => {
+    try {
+        await libraries.deleteEntry(req.params.id);
+        res.status(200).json({ message: 'Library entry deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 

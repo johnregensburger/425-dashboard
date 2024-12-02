@@ -28,7 +28,7 @@ async function readGame(id) {
             `
             SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
             FROM Games
-            WHERE userId = ?
+            WHERE gameId = ?
             `,
             [id],
             function (e, row) {

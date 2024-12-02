@@ -33,7 +33,7 @@ async function readEntry(id) {
     return new Promise((resolve, reject) => {
         db.get(`
             SELECT ownershipId, userId, username, gameId, gameName, status
-            FROM Users
+            FROM UserLibrary
             WHERE userId = ?`, [id], (err, row) => {
             if (err) {
                 console.log(`ERR: Library entry read failed. See below:`);
