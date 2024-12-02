@@ -44,6 +44,27 @@ async function readGame(id) {
     });
 }
 
+async function readAll() {
+    return new Promise((resolve, reject) => {
+        db.get(
+            `
+            SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+            FROM Games
+            `,
+            [id],
+            function (e, row) {
+                if (e) {
+                    reject(e); // Reject if there's an error
+                } else if (row) {
+                    resolve(row); // Resolve with the row data if found
+                } else {
+                    reject(new Error("Game not found")); // Reject if no game is found
+                }
+            }
+        );
+    });
+}
+
 async function filterReadGame(filter) {
     return new Promise((resolve, reject) => {
         db.all(
@@ -71,7 +92,29 @@ async function filterReadGame(filter) {
                     reject(new Error("No games found"));
                 }
             }
-        )
+        );
+    });
+}
+
+async function filterPlayerNumber(min, max) {
+    return new Promise((resolve, reject) => {
+        db.all(
+            `
+            SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+            FROM Games
+            WHERE minPlayers >= ? AND maxPlayers <=?
+            `,
+            [min, max],
+            function(e, results) {
+                if (e) {
+                    reject(e);
+                } else if (results) {
+                    resolve(results);
+                } else {
+                    reject(new Error("No games found"));
+                }
+            }
+        );
     });
 }
 
@@ -105,6 +148,9 @@ function deleteGame(id) {
 module.exports = {
     createGame,
     readGame,
+    readAll,
+    filterReadGame,
+    filterPlayerNumber,
     updateGame,
     deleteGame
 }
