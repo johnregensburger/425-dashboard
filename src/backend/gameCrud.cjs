@@ -55,6 +55,7 @@ async function readAll() {
                 if (e) {
                     reject(e); // Reject if there's an error
                 } else if (rows && rows.length > 0) {
+                    console.log("Games found");
                     resolve(rows); // Resolve with all rows if found
                 } else {
                     reject(new Error("No games found")); // Reject if no games are found

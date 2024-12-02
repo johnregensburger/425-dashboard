@@ -53,6 +53,22 @@ button.submit {
   transition: border-color 0.25s;
 }
 
+button.filter {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #5F3536;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button.filter:hover{
+  background-color:#503CF6;
+}
+
 button.link
 {
   border-radius: 5px;
@@ -217,19 +233,6 @@ header button:hover {
 
 .sidebar h2 {
   margin-top: 0;
-}
-
-.sidebar .close-btn {
-  background-color: #503CF6;
-  font-size: 15px;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.sidebar .close-btn:hover {
-  background-color: #503CF6;
 }
 
 /*  SLIDER  */
