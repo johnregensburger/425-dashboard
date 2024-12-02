@@ -348,14 +348,12 @@ input[type="range"]::-webkit-slider-runnable-track {
   background-color: #503CF6;
 }
 
-/* Image style */
 .grid-item-img {
   width: 100%;
   height: 150px;
   object-fit: cover; /* Makes the image cover the container */
 }
 
-/* Text inside the button */
 .grid-item-text {
   background-color: transparent; /* Semi-transparent background */
   padding: 10px;

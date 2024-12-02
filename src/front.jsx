@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Front = () => {
 
@@ -6,6 +6,9 @@ const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 const [fromValue, setFromValue] = React.useState(1);
 const [toValue, setToValue] = React.useState(8);
+
+const [games, setGames] = useState([]);
+const [visibleGames, setVisibleGames] = useState(20); // Start by showing 20 games
 
 
 const toggleSidebar = () => {
@@ -30,9 +33,30 @@ const toPercent = (toValue / 100) * 100;
   navigate('/library');
  }
 
- const goToInfo = () => {  //NEEDS TO BE ADJUSTED PER GAME
+ const goToInfo = (game) => {  //NEEDS TO BE ADJUSTED PER GAME
   navigate('/info');
 }
+
+const fetchGames = async () => {
+  try {
+    const response = await fetch(`http://localhost:3000/games?minPlayers=${fromValue}&maxPlayers=${toValue}`); //fix. not correct.
+    if (!response.ok) {
+      throw new Error('Failed to fetch games');
+    }
+    const data = await response.json(); // Fetch the data
+    setGames(data); //update the state
+  } catch (error) {
+    console.error('Error fetching games:', error);
+  }
+};
+
+const loadMoreGames = () => {
+  setVisibleGames((prev) => Math.min(prev + 20, games.length));
+};
+
+useEffect(() => {
+  fetchGames();
+}, []);
 
    return ( 
      <div className={`app ${isSidebarOpen ? "sidebar-open" : ""}`}>
@@ -104,18 +128,21 @@ const toPercent = (toValue / 100) * 100;
 
       {/* Main Content*/}
       <main>
-        <h1>Dashboard Game Database</h1>
-        {/* Container for the scrollable button grid */}
-        <div className="button-grid">
-          {[...Array(20)].map((_, index) => (
-            <button key={index} className="grid-item" onClick={goToInfo}>
-              <img src={`https://via.placeholder.com/150`} alt={`Game ${index + 1}`} className="grid-item-img" />
-              <span className="grid-item-text">Game {index + 1}</span>
-            </button>
-          ))}
-        </div>
-      </main>
-    </div>
+      <h1>Dashboard Game Database</h1>
+      <div className="button-grid" onScroll={(e) => {
+          const { scrollTop, scrollHeight, clientHeight } = e.target;
+          if (scrollTop + clientHeight >= scrollHeight - 10) {loadMoreGames();}}}>
+
+        {games.slice(0, visibleGames).map((game) => (
+          <button key={game.id} className="grid-item"
+            onClick={() => goToInfo(game)}>
+            <img src={game.img} alt={game.name} className="grid-item-img"/>
+            <span className="grid-item-text">{game.name}</span>
+          </button>
+        ))}
+      </div>
+    </main>
+    </div> 
     
    );
  };
