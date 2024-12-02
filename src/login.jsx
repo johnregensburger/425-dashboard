@@ -1,6 +1,5 @@
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import bookshelf from './assets/bookshelf_425.png'
 const Login = () => {
 
  const navigate = useNavigate();
@@ -109,7 +108,7 @@ const Login = () => {
     </div>
   </div>
   <div className="right">
-    <img src={bookshelf} alt="bookshelf" />
+     <img src="/bookshelf_425.png" alt="Bookshelf" />
   </div>
 </div>
    );
