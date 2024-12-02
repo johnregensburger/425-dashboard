@@ -9,10 +9,7 @@ const Library = () => {
  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
  const [fromValue, setFromValue] = React.useState(1);
  const [toValue, setToValue] = React.useState(8);
- const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
- const fromPercent = (fromValue / 100) * 100;
- const toPercent = (toValue / 100) * 100;
+ const [isLoggedIn, setIsLoggedIn] = useState(false);
 
  const goToFront = () => { //navigate to front page  
         navigate('/front');

@@ -121,6 +121,16 @@ exp.post('/games', async (req, res) => {
     }
 });
 
+// Read or fetch all games
+exp.get('/games', async (req, res) => {
+    try {
+        const allGames = await games.readAll();
+        res.json(allGames);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 // Read or fetch game
 exp.get('/games/:id', async (req, res) => {
     try {

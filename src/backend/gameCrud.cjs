@@ -46,19 +46,18 @@ async function readGame(id) {
 
 async function readAll() {
     return new Promise((resolve, reject) => {
-        db.get(
+        db.all(
             `
             SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
             FROM Games
             `,
-            [id],
-            function (e, row) {
+            function (e, rows) {
                 if (e) {
                     reject(e); // Reject if there's an error
-                } else if (row) {
-                    resolve(row); // Resolve with the row data if found
+                } else if (rows && rows.length > 0) {
+                    resolve(rows); // Resolve with all rows if found
                 } else {
-                    reject(new Error("Game not found")); // Reject if no game is found
+                    reject(new Error("No games found")); // Reject if no games are found
                 }
             }
         );

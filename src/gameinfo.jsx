@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const GameInfo = () => {
 const { id } = useParams();
-const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 
  const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!
  }
 
  const goToFront = () => {
-    navigate('/front');     //navigate to front
+    navigate('/front'); // navigate to front
  }
 
  const response = fetch(`http://localhost:3000/games/${id}`, {
