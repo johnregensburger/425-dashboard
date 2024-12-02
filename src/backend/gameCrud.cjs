@@ -44,6 +44,37 @@ async function readGame(id) {
     });
 }
 
+async function filterReadGame(filter) {
+    return new Promise((resolve, reject) => {
+        db.all(
+            `
+            SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+            FROM Games
+            WHERE gameName LIKE ? 
+            OR description LIKE ? 
+            OR leadDesigner LIKE ? 
+            OR publisher LIKE ? 
+            OR boxArtUrl LIKE ? 
+            OR releaseDate LIKE ? 
+            OR minPlayers LIKE ? 
+            OR maxPlayers LIKE ? 
+            OR playTime LIKE ? 
+            OR age LIKE ?
+            `,
+            Array(10).fill(`%${filter}%`),
+            function(e, results) {
+                if (e) {
+                    reject(e);
+                } else if (results) {
+                    resolve(results);
+                } else {
+                    reject(new Error("No games found"));
+                }
+            }
+        )
+    });
+}
+
 // Update a column of a game at specified ID with a new value
 async function updateGame(id, column, newValue) {
     const query = `UPDATE Games SET ${column} = ? WHERE gameId = ?`;
