@@ -17,6 +17,10 @@ const Library = () => {
  const goToFront = () => { //navigate to front page  
         navigate('/front');
     }
+  
+  const goToInfo = () => {  //NEEDS TO BE ADJUSTED PER GAME
+      navigate('/info');
+  }
 
 const logOut = () => {
     setIsLoggedIn((prevState) => !prevState);
@@ -93,7 +97,16 @@ const logOut = () => {
         </div>
       </div>
     <main>
-
+    <h1>User Library</h1>
+        {/* Container for the scrollable button grid */}
+        <div className="button-grid">
+          {[...Array(20)].map((_, index) => (
+            <button key={index} className="grid-item" onClick={goToInfo}>
+              <img src={`https://via.placeholder.com/150`} alt={`Game ${index + 1}`} className="grid-item-img" />
+              <span className="grid-item-text">Game {index + 1}</span>
+            </button>
+          ))}
+        </div>
     </main>
   </div>
    );

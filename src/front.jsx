@@ -30,7 +30,10 @@ const toPercent = (toValue / 100) * 100;
   navigate('/library');
  }
 
- console.log('Front Page component rendered!');
+ const goToInfo = () => {  //NEEDS TO BE ADJUSTED PER GAME
+  navigate('/info');
+}
+
    return ( 
      <div className={`app ${isSidebarOpen ? "sidebar-open" : ""}`}>
       {/* Header Section */}
@@ -105,7 +108,7 @@ const toPercent = (toValue / 100) * 100;
         {/* Container for the scrollable button grid */}
         <div className="button-grid">
           {[...Array(20)].map((_, index) => (
-            <button key={index} className="grid-item">
+            <button key={index} className="grid-item" onClick={goToInfo}>
               <img src={`https://via.placeholder.com/150`} alt={`Game ${index + 1}`} className="grid-item-img" />
               <span className="grid-item-text">Game {index + 1}</span>
             </button>

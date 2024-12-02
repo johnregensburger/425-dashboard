@@ -112,3 +112,5 @@ exp.get('/users/validate', async (req, res) => {
 exp.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });
+
+module.exports = exp;
