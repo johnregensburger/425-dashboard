@@ -56,6 +56,8 @@ const Login = () => {
 
       if (!response.ok) {
         setMessage(data.error || 'Invalid username or password'); // Error
+        alert("Invalid username or password. Please try again.");
+        setFormData({ username: '', password: '' }); // Reset form on invalid login
         return;
       }
 
@@ -63,11 +65,14 @@ const Login = () => {
       console.log("User validated:", data);
 
       alert(`Welcome, ${data.username}!`);
+      setFormData({ username: '', password: '' });
       navigate('/front');     
 
     } catch(error) {
       console.error('Error:', error);
       alert(`Error: ${error.message || 'Unknown Error'}`);
+      alert("An error has occurred. Please try again.");
+      setFormData({ username: '', password: '' }); // Reset form on invalid login
     }
  };
 

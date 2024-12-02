@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Front = () => {
 
-const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 const [fromValue, setFromValue] = React.useState(1);
 const [toValue, setToValue] = React.useState(8);
-
 const [games, setGames] = useState([]);
 const [visibleGames, setVisibleGames] = useState(20); // Start by showing 20 games
 
@@ -14,9 +13,6 @@ const [visibleGames, setVisibleGames] = useState(20); // Start by showing 20 gam
 const toggleSidebar = () => {
   setIsSidebarOpen(prevState => !prevState);
 };
-
-const fromPercent = (fromValue / 100) * 100;
-const toPercent = (toValue / 100) * 100;
 
  const navigate = useNavigate();
 
@@ -34,12 +30,17 @@ const toPercent = (toValue / 100) * 100;
  }
 
  const goToInfo = (game) => {  //NEEDS TO BE ADJUSTED PER GAME
-  navigate('/info');
+  navigate(`/info/${game}`);
+}
+
+const checkLoginStatus = () => {
+  //check if user is logged in
 }
 
 const fetchGames = async () => {
+  
   try {
-    const response = await fetch(`http://localhost:3000/games?minPlayers=${fromValue}&maxPlayers=${toValue}`); //fix. not correct.
+    const response = await fetch(`http://localhost:3000/games/${1}`); //fix back to id
     if (!response.ok) {
       throw new Error('Failed to fetch games');
     }
@@ -135,7 +136,7 @@ useEffect(() => {
 
         {games.slice(0, visibleGames).map((game) => (
           <button key={game.id} className="grid-item"
-            onClick={() => goToInfo(game)}>
+            onClick={() => goToInfo(game.id)}>
             <img src={game.img} alt={game.name} className="grid-item-img"/>
             <span className="grid-item-text">{game.name}</span>
           </button>
