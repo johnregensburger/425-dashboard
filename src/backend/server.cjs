@@ -1,5 +1,6 @@
 // Express server that defines HTTP routes or endpoints for all CRUD operations
 const express = require('express');
+//const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -15,6 +16,46 @@ exp.use(bodyParser.json());
 
 // Use CORS as well
 exp.use(cors());
+/*
+// LOGIN =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+// Praying to whatever's out there that this works
+
+exp.use(session({
+    secret: 'yourSecretKey', // Replace with a secure, random string
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,        // Helps prevent XSS
+      secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
+      maxAge: 1000 * 60 * 60 // 1-hour session
+    }
+}));
+
+exp.listen(port, () => {
+    console.log('Server running on http://localhost:' + port);
+  });
+
+exp.post('/login', (req, res) => {
+    const { username, password } = req.body;
+  
+    // Validate credentials (e.g., check database)
+    if (users.verifyLogin(username, password)) {
+      req.session.user = { username }; // Save user info in session
+      res.status(200).json({ message: 'Login successful' });
+    } else {
+      res.status(401).json({ message: 'Invalid credentials' });
+    }
+});
+
+exp.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+      if (err) {
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      res.clearCookie('connect.sid'); // Clear the session cookie
+      res.status(200).json({ message: 'Logged out successfully' });
+    });
+});*/
 
 // USER ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
