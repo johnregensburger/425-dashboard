@@ -162,6 +162,29 @@ exp.post('/games', async (req, res) => {
     }
 });
 
+// Read or fetch all games
+exp.get('/games', async (req, res) => {
+    try {
+        const allGames = await games.readAll();
+        res.json(allGames);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Read or fetch all games in the filter parameters
+exp.get('/games/filter', async (req, res) => {
+    try {
+        const minPlayers = parseInt(req.query.minPlayers, 10);
+        const maxPlayers = parseInt(req.query.maxPlayers, 10);
+
+        const filtGames = await games.filterPlayerNumber(minPlayers,maxPlayers);
+        res.json(filtGames);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 // Read or fetch game
 exp.get('/games/:id', async (req, res) => {
     try {

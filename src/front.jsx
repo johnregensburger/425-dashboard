@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Front = () => {
 
-const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const [isLoggedIn, setIsLoggedIn] = useState(true);
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 const [fromValue, setFromValue] = React.useState(1);
 const [toValue, setToValue] = React.useState(8);
-
 const [games, setGames] = useState([]);
 const [visibleGames, setVisibleGames] = useState(20); // Start by showing 20 games
 
@@ -14,9 +13,6 @@ const [visibleGames, setVisibleGames] = useState(20); // Start by showing 20 gam
 const toggleSidebar = () => {
   setIsSidebarOpen(prevState => !prevState);
 };
-
-const fromPercent = (fromValue / 100) * 100;
-const toPercent = (toValue / 100) * 100;
 
  const navigate = useNavigate();
 
@@ -33,24 +29,44 @@ const toPercent = (toValue / 100) * 100;
   navigate('/library');
  }
 
- const goToInfo = (game) => {  //NEEDS TO BE ADJUSTED PER GAME
-  navigate('/info');
+ const goToInfo = (id) => {
+  navigate(`/info/${id}`);
+}
+
+const checkLoginStatus = () => {
+  //check if user is logged in
 }
 
 const fetchGames = async () => {
+  
   try {
-    const response = await fetch(`http://localhost:3000/games?minPlayers=${fromValue}&maxPlayers=${toValue}`); //fix. not correct.
+    const response = await fetch(`http://localhost:3000/games`);
     if (!response.ok) {
       throw new Error('Failed to fetch games');
     }
+    console.log('games fetched');
     const data = await response.json(); // Fetch the data
-    setGames(data); //update the state
+    setGames(data); //updates the state
   } catch (error) {
     console.error('Error fetching games:', error);
   }
 };
 
-const loadMoreGames = () => {
+const fetchFilter = async (fromValue, toValue) => {
+  try {
+    const response = await fetch(`http://localhost:3000/games/filter?minPlayers=${fromValue}&maxPlayers=${toValue}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch games');
+    }
+    console.log('games fetched');
+    const data = await response.json(); // Fetch the data
+    setGames(data); //updates the state
+  } catch (error) {
+    console.error('Error fetching games:', error);
+  }
+};
+
+const loadMoreGames = () => { //loads more games into the scrollbox
   setVisibleGames((prev) => Math.min(prev + 20, games.length));
 };
 
@@ -91,7 +107,7 @@ useEffect(() => {
 
       {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <button className="close-btn" onClick={toggleSidebar}>
+        <button className="filter" onClick={toggleSidebar}>
           ×
         </button>
         <h2>Filter</h2>
@@ -124,22 +140,33 @@ useEffect(() => {
             <span>Max: {toValue}</span>
           </div>
         </div>
+        <button className="filter" onClick={() => fetchFilter(fromValue, toValue)}>Filter</button>
       </div>
 
       {/* Main Content*/}
       <main>
       <h1>Dashboard Game Database</h1>
-      <div className="button-grid" onScroll={(e) => {
+      <div className="button-grid" 
+      onScroll={(e) => {
           const { scrollTop, scrollHeight, clientHeight } = e.target;
           if (scrollTop + clientHeight >= scrollHeight - 10) {loadMoreGames();}}}>
 
-        {games.slice(0, visibleGames).map((game) => (
-          <button key={game.id} className="grid-item"
-            onClick={() => goToInfo(game)}>
-            <img src={game.img} alt={game.name} className="grid-item-img"/>
-            <span className="grid-item-text">{game.name}</span>
-          </button>
-        ))}
+        {/* maps each game into its own button */}
+        {games.length === 0 ? (<p>No games available.</p>) : (
+            games.slice(0, visibleGames).map((game) => (
+                <button
+                    key={game.id}
+                    className="grid-item"
+                    onClick={() => goToInfo(game.id)}
+                    aria-label={`View details for ${game.gameName}`}>
+                    <img
+                        src={game.boxArtUrl} // Ensure property matches your backend
+                        alt={`${game.gameName}`}
+                        className="grid-item-img"/>
+                    <span className="grid-item-text">{game.gameName}</span>
+                </button>
+            ))
+        )}
       </div>
     </main>
     </div> 

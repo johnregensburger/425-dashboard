@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const GameInfo = () => {
-
-const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const { id } = useParams();
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 
  const navigate = useNavigate();
 
@@ -20,8 +20,12 @@ const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!
  }
 
  const goToFront = () => {
-    navigate('/front');     //navigate to front
+    navigate('/front'); // navigate to front
  }
+
+ const response = fetch(`http://localhost:3000/games/${id}`, {
+    method: 'GET',
+ });  //finish here
 
    return ( 
      <div >
@@ -56,10 +60,13 @@ const [isLoggedIn, setIsLoggedIn] = useState(true); //TEST CHANGE LATER!!!!!!!!!
 
       {/* Main Content*/}
       <main>
-        <h1>Title of Game here</h1>
-        {/* HAVE ALL GAME INFO HERE CALLED INDIVIDUALLY 
-            INCLUDE ADD TO LIBRARY BUTTON THAT WILL ADD THE GAME TO THE DATABASE FOR THE USER'S LIBRARY
-            */}
+        <h1>${game.name} ${game.releaseDate}</h1>
+        <h2>${game.publisher}, ${game.leadDesigner}</h2>
+        <img src={game.boxArtURL} alt={game.name}/>
+        <p>${game.description}</p>
+        <p>Players: ${game.minPlayers} - ${game.maxPlayers}</p>
+        <p>Age Suggestion: ${game.age}</p>
+        <p>Avg. Playtime: ${game.playTime}</p>
       </main>
     </div>
     
