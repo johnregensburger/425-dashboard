@@ -6,7 +6,7 @@ async function createGame(gameName, description, leadDesigner, publisher, boxArt
     await new Promise((resolve, reject) => {
         db.run(
             `
-            INSERT OR IGNORE INTO Games (gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age)
+            INSERT OR IGNORE INTO Games (gameId, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `,
             [gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age],
@@ -26,7 +26,7 @@ async function readGame(id) {
     return new Promise((resolve, reject) => {
         db.get(
             `
-            SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+            SELECT gameId, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
             FROM Games
             WHERE gameId = ?
             `,
@@ -48,7 +48,7 @@ async function readAll() {
     return new Promise((resolve, reject) => {
         db.all(
             `
-            SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+            SELECT gameId, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
             FROM Games
             `,
             function (e, rows) {
@@ -69,9 +69,10 @@ async function filterReadGame(filter) {
     return new Promise((resolve, reject) => {
         db.all(
             `
-            SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+            SELECT game,ID, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
             FROM Games
-            WHERE gameName LIKE ? 
+            WHERE gameId LIKE ?
+            OR gameName LIKE ? 
             OR description LIKE ? 
             OR leadDesigner LIKE ? 
             OR publisher LIKE ? 
@@ -103,7 +104,7 @@ async function filterPlayerNumber(min, max) {
         return new Promise((resolve, reject) => {
             db.all(
                 `
-                SELECT gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+                SELECT gameId, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
                 FROM Games
                 WHERE minPlayers >= ? AND maxPlayers <=?
                 `,

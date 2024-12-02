@@ -30,6 +30,7 @@ const toggleSidebar = () => {
  }
 
  const goToInfo = (id) => {
+  console.log(`going to ${id} page`);
   navigate(`/info/${id}`);
 }
 
@@ -155,9 +156,9 @@ useEffect(() => {
         {games.length === 0 ? (<p>No games available.</p>) : (
             games.slice(0, visibleGames).map((game) => (
                 <button
-                    key={game.id}
+                    key={game.gameId}
                     className="grid-item"
-                    onClick={() => goToInfo(game.id)}
+                    onClick={() => goToInfo(game.gameId)}
                     aria-label={`View details for ${game.gameName}`}>
                     <img
                         src={game.boxArtUrl} // Ensure property matches your backend

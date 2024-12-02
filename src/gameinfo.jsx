@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams} from 'react-router-dom';
 const GameInfo = () => {
 const { id } = useParams();
 const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [game, setGame] = useState([]);
 
  const navigate = useNavigate();
 
@@ -23,9 +24,23 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
     navigate('/front'); // navigate to front
  }
 
- const response = fetch(`http://localhost:3000/games/${id}`, {
-    method: 'GET',
- });  //finish here
+ const fetchGame = async () => {
+  try {
+    const response = await fetch(`http://localhost:3000/games/${id}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch game');
+    }
+    console.log('game fetched');
+    const data = await response.json(); // Fetch the data
+    setGame(data); //updates the state
+  } catch (error) {
+    console.error('Error fetching games:', error);
+  }
+};
+
+useEffect(() => {
+  fetchGame();
+}, [id]);
 
    return ( 
      <div >
@@ -60,13 +75,15 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
 
       {/* Main Content*/}
       <main>
-        <h1>${game.name} ${game.releaseDate}</h1>
-        <h2>${game.publisher}, ${game.leadDesigner}</h2>
-        <img src={game.boxArtURL} alt={game.name}/>
-        <p>${game.description}</p>
-        <p>Players: ${game.minPlayers} - ${game.maxPlayers}</p>
-        <p>Age Suggestion: ${game.age}</p>
-        <p>Avg. Playtime: ${game.playTime}</p>
+        <h1>{game.gameName} {game.releaseDate}</h1>
+        <h2>{game.publisher}, {game.leadDesigner}</h2>
+        <div className="image_container">
+            <img src={game.boxArtUrl} alt={game.gameName}/>
+        </div>
+        <p>{game.description}</p>
+        <p>Players: {game.minPlayers} - {game.maxPlayers}</p>
+        <p>Age Suggestion: {game.age}</p>
+        <p>Avg. Playtime: {game.playTime}</p>
       </main>
     </div>
     

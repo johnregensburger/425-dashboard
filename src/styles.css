@@ -364,3 +364,14 @@ input[type="range"]::-webkit-slider-runnable-track {
   font-size: 16px;
   font-weight: 500;
 }
+
+/* Game info page ------------------------------------*/
+
+.image_container {
+  margin-top: 10px; /* Reduce space between the header and the slider container */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 80px;
+  max-width: 100%;
+}
