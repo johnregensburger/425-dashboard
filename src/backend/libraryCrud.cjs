@@ -5,45 +5,149 @@ const games = require("./gameCrud.cjs");
 
 // Creates a library entry based on the user and what game they've wishlisted or now own
 async function createEntry(userId, gameId, status) {
-    username = users.readUser(userId).username;
-    gameName = games.readGame(gameId).gameName;
-    try {
-        db.run(
-            `
-            INSERT OR IGNORE INTO UserLibrary (userId, username, gameId, gameName, status)
-            VALUES (?, ?, ?, ?, ?)
-            `,
-            [userId, username, gameId, gameName, status],
-            function (e) {
-                if (e) {
-                    console.log(`ERR: Library entry creation failed. See below:`);
-                    console.error(e.message);
-                } else {
-                    console.log(`Inserted library entry`);
+    let username = users.readUser(userId).username;
+    let gameName = games.readGame(gameId).gameName;
+    await new Promise((resolve, reject) => {
+        try {
+            db.run(
+                `
+                INSERT OR IGNORE INTO UserLibrary (userId, gameId, username, gameName, status)
+                VALUES (?, ?, ?, ?, ?)
+                `,
+                [userId, username, gameId, gameName, status],
+                function (e) {
+                    if (e) {
+                        console.error(`ERR: Library entry creation failed. See below:`);
+                        console.error(e.message);
+                        return reject(e);
+                    } else {
+                        console.log(`Inserted library entry`);
+                        resolve();
+                    }
                 }
-            }
-        );
-    } catch (e) {
-        console.error(e.message);
-    }
+            );
+        } catch (e) {
+            console.error(e.message);
+        }
+    });
 }
 
 // Reads a library entry based on the entry ID
 async function readEntry(id) {
     return new Promise((resolve, reject) => {
-        db.get(`
+        db.get(
+            `
             SELECT ownershipId, userId, username, gameId, gameName, status
             FROM UserLibrary
-            WHERE userId = ?`, [id], (err, row) => {
+            WHERE ownershipId = ?
+            `,
+            [id], (err, row) => {
             if (err) {
-                console.log(`ERR: Library entry read failed. See below:`);
+                console.error(`ERR: Library entry read failed. See below:`);
                 console.error(err.message);
                 reject(err);
-            } else {
+            } else if (row) {
                 resolve(row);
+            } else {
+                reject(new Error("Library entry not found"));
             }
         });
     });
+}
+
+async function readAllLibrary() {
+    return new Promise((resolve, reject) => {
+        db.all(
+            `
+            SELECT ownershipId, userId, username, gameId, gameName, status
+            FROM UserLibrary
+            `,
+            function (e, rows) {
+                if (e) {
+                    reject(e); // Reject if there's an error
+                } else if (rows && rows.length > 0) {
+                    console.log("Library entries found");
+                    resolve(rows); // Resolve with all rows if found
+                } else {
+                    reject(new Error("No library entries found")); // Reject if no games are found
+                }
+            }
+        );
+    });
+}
+
+async function readAllUserLibrary(id) {
+    return new Promise((resolve, reject) => {
+        db.all(
+            `
+            SELECT ownershipId, userId, username, gameId, gameName, status
+            FROM UserLibrary
+            WHERE userId = ?
+            `,
+            [id],
+            function (e, rows) {
+                if (e) {
+                    reject(e); // Reject if there's an error
+                } else if (rows && rows.length > 0) {
+                    console.log("Library entries found");
+                    resolve(rows); // Resolve with all rows if found
+                } else {
+                    reject(new Error("No library entries found")); // Reject if no games are found
+                }
+            }
+        );
+    });
+}
+
+async function filterReadLibrary(id, filter) {
+    return new Promise((resolve, reject) => {
+        db.all(
+            `
+            SELECT ownershipId, userId, username, gameId, gameName, status
+            FROM UserLibrary
+            WHERE userId LIKE ?
+            AND (gameName LIKE ?
+            OR status LIKE ?)
+            `,
+            [id, filter, filter],
+            function(e, results) {
+                if (e) {
+                    reject(e);
+                } else if (results) {
+                    resolve(results);
+                } else {
+                    reject(new Error("No games found"));
+                }
+            }
+        );
+    });
+}
+
+async function filterPlayerNumber(id, min, max) {
+    if (min > max) {
+        console.error("Minimum players is greater than maximum players. Please adjust and try again.");
+    } else {
+        return new Promise((resolve, reject) => {
+            db.all(
+                `
+                SELECT gameId, gameName, description, leadDesigner, publisher, boxArtUrl, releaseDate, minPlayers, maxPlayers, playTime, age
+                FROM Games
+                WHERE userId = ?
+                AND minPlayers >= ? AND maxPlayers <=?
+                `,
+                [id, min, max],
+                function(e, results) {
+                    if (e) {
+                        reject(e);
+                    } else if (results) {
+                        resolve(results);
+                    } else {
+                        reject(new Error("No games found"));
+                    }
+                }
+            );
+        });
+    }
 }
 
 // Updates an attribute of a library entry
@@ -76,6 +180,9 @@ async function deleteEntry(id) {
 module.exports = {
     createEntry,
     readEntry,
+    readAllLibrary,
+    filterReadLibrary,
+    filterPlayerNumber,
     updateEntry,
     deleteEntry
 }
