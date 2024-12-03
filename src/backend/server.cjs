@@ -307,7 +307,7 @@ exp.get('/libraries', async (req, res) => {
 });
 
 // Read or fetch all games of a specific user
-exp.get('/userlibrary/:id', authorizeUser, async (req, res) => { // Add authorizeUser middleware here
+exp.get('/userlibrary/:id', async (req, res) => { // Add authorizeUser middleware here
     const userId = req.user.id;
     console.log(req.user.id);
     try {
