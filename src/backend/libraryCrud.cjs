@@ -181,6 +181,7 @@ module.exports = {
     createEntry,
     readEntry,
     readAllLibrary,
+    readAllUserLibrary,
     filterReadLibrary,
     filterPlayerNumber,
     updateEntry,
