@@ -37,7 +37,7 @@ async function readEntry(id) {
     return new Promise((resolve, reject) => {
         db.get(
             `
-            SELECT ownershipId, userId, username, gameId, gameName, status
+            SELECT ownershipId, userId, gameId, username, gameName, status
             FROM UserLibrary
             WHERE ownershipId = ?
             `,
@@ -60,7 +60,7 @@ async function readAllLibrary() {
     return new Promise((resolve, reject) => {
         db.all(
             `
-            SELECT ownershipId, userId, username, gameId, gameName, status
+            SELECT ownershipId, userId, gameId, username, gameName, status
             FROM UserLibrary
             `,
             function (e, rows) {
@@ -82,7 +82,7 @@ async function readUserLibrary(id) {
     return new Promise((resolve, reject) => {
         db.all(
             `
-            SELECT ownershipId, userId, username, gameId, gameName, status
+            SELECT ownershipId, userId, gameId, username, gameName, status
             FROM UserLibrary
             WHERE userId = ?
             `,
@@ -106,7 +106,7 @@ async function filterReadLibrary(id, filter) {
     return new Promise((resolve, reject) => {
         db.all(
             `
-            SELECT ownershipId, userId, username, gameId, gameName, status
+            SELECT ownershipId, userId, gameId, username, gameName, status
             FROM UserLibrary
             WHERE userId LIKE ?
             AND (gameName LIKE ?
