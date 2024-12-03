@@ -55,6 +55,7 @@ async function readEntry(id) {
     });
 }
 
+// Reads the library of all users
 async function readAllLibrary() {
     return new Promise((resolve, reject) => {
         db.all(
@@ -76,6 +77,7 @@ async function readAllLibrary() {
     });
 }
 
+// Reads the library of a specific user
 async function readAllUserLibrary(id) {
     return new Promise((resolve, reject) => {
         db.all(
@@ -99,6 +101,7 @@ async function readAllUserLibrary(id) {
     });
 }
 
+// Reads and filters the library of a specific user
 async function filterReadLibrary(id, filter) {
     return new Promise((resolve, reject) => {
         db.all(
@@ -123,6 +126,7 @@ async function filterReadLibrary(id, filter) {
     });
 }
 
+// Reads the library of a specific user and filters by player count
 async function filterPlayerNumber(id, min, max) {
     if (min > max) {
         console.error("Minimum players is greater than maximum players. Please adjust and try again.");
