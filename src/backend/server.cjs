@@ -254,7 +254,7 @@ exp.get('/libraries', async (req, res) => {
 });
 
 // Read or fetch all games of a specific user
-exp.get('/libraries', async (req, res) => {
+exp.get('/userlibrary/:id', async (req, res) => {
     const userId = req.params.id;
     try {
         const entries = await libraries.readUserLibrary(userId);
