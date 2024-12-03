@@ -79,27 +79,28 @@ const [location, setLocation] = useState();
   }
 };
 
-const addToLibrary = async (userId) => {
+const addToLibrary = async (userId, status) => {
   try {
     console.log("Adding to user library...");
 
-    const response = await fetch(`http://localhost:3000/libraries/${userId}`, {
+    const response = await fetch(`http://localhost:3000/libraries`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ }), //UserId, gameId, and status
+      body: JSON.stringify({ 
+        userId: userId,
+        id: id,
+        status: status,
+      }), //UserId, gameId, and status
     });
     
     const data = await response.json();
 
     if (!response.ok) {
-      setMessage(data.error || 'Response was not okay:');
       console.log("Library error");
-      alert("An Error Occurred. Please try again.");
       return;
     }
-    setMessage(data.message); // successfully added
     console.log("Library Success");
     alert(`Game added to your library`);
 
@@ -120,13 +121,11 @@ const removeFromLibrary = async (userId) => {
     const data = await response.json();
 
     if (!response.ok) {
-      setMessage(data.error || 'Response was not okay:');
       console.log("Library error");
       alert("An Error Occurred. Please try again.");
       return;
     }
 
-    setMessage(data.message); // successfully deleted
     console.log("Library Success");
     alert(`Game removed from your library`);
 
@@ -219,7 +218,7 @@ const nicerParagraph = (desc) => {
             <div className="mini-container">
               {location ? (
                   isLoggedIn ? (
-                    <button className="filter" onClick={addToLibrary(userId)}>
+                    <button className="filter" onClick={() => addToLibrary(userId, "owned")}>
                       Add to my Library {/* Is Logged in */}
                     </button>
                   ) : (
@@ -227,7 +226,7 @@ const nicerParagraph = (desc) => {
                       Add to my Library {/* Is Logged OUT */}
                     </button>
                   )) : (
-                    <button className="filter" onClick={removeFromLibrary(userId)}>
+                    <button className="filter" onClick={() => removeFromLibrary(userId, "owned")}>
                       Remove from my Library {/* Is Logged in */}
                     </button>
                 )}

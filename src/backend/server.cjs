@@ -272,9 +272,8 @@ exp.delete('/games/:id', async (req, res) => {
 // LIBRARY ENDPOINTS -=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=--=-=- //
 
 // Create library entry
-exp.post('/libraries', authenticateUser, async (req, res) => {
-    const { gameId, status } = req.body;
-    const userId = req.user.id;
+exp.post('/libraries', async (req, res) => {
+    const { userId, gameId, status } = req.body;
     console.log("User ID: " + userId);
 
     if (!userId || !gameId || !status) {
