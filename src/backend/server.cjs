@@ -32,6 +32,15 @@ exp.use(session({
     }
 }));
 
+// Function to set req.user
+exp.use((req, res, next) => {
+    if (req.session && req.session.user) {
+      req.user = req.session.user;
+    } else {
+      req.user = null;
+    }
+    next();
+});
 
 // // Checks if a session exists—is the user authenticated?
 // function authenticateUser(req, res, next) {
@@ -298,8 +307,9 @@ exp.get('/libraries', async (req, res) => {
 });
 
 // Read or fetch all games of a specific user
-exp.get('/userlibrary/:id', async (req, res) => {
+exp.get('/userlibrary/:id', authorizeUser, async (req, res) => { // Add authorizeUser middleware here
     const userId = req.user.id;
+    console.log(req.user.id);
     try {
         const entries = await libraries.readUserLibrary(userId);
         if (entries) {
