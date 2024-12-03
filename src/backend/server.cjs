@@ -39,6 +39,7 @@ exp.use((req, res, next) => {
     } else {
       req.user = null;
     }
+    console.log('Session data:', req.session);
     next();
 });
 
@@ -142,7 +143,7 @@ exp.post('/users/login', async (req, res) => {
         req.session.user = { id: userId, username };
         res.status(200).json({ message: 'Login successful', username });
         console.log("User id " + req.session.user.id + " logged in");
-        console.log("Session after login: " + req.session);
+        console.log("Session after login: ", req.session); // Use comma for better logging
 
     } catch (error) {
         if (error.message === "User not found") {

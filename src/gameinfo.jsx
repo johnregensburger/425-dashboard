@@ -67,6 +67,7 @@ const [location, setLocation] = useState();
 
  const fetchGame = async () => {
   try {
+    console.log('Fetching game for userId:', userId);
     const response = await fetch(`http://localhost:3000/games/${userId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch game');
@@ -137,11 +138,13 @@ const removeFromLibrary = async (userId) => {
 }
 
 useEffect(() => {
-  fetchGame();
-  checkLoc(loc);
-  checkLoginStatus();
-}, [id, loc]);
-
+  // Ensure userId is set before calling fetchGame
+  if (userId) {
+    fetchGame();
+  } else {
+    console.error('userId is null');
+  }
+}, [userId]);
 
 const nicerParagraph = (desc) => {
   const remove = ["<br/>", "&quot;", "&amp;", "&mdash;","&egrave;","&ldquo;","&rdquo;"];
