@@ -34,8 +34,9 @@ exp.use(session({
 
 // Checks if a session exists—is the user authenticated?
 function authenticateUser(req, res, next) {
-    if (req.session.user) {
-        return next();
+    if (req.session && req.session.user) {
+        req.user = req.session.user;
+        next();
     } else {
         res.status(401).json({ error: 'Unauthorized access' });
     }
@@ -130,7 +131,8 @@ exp.post('/users/login', async (req, res) => {
         const userId = await users.getUserId(username, password);
         req.session.user = { id: userId, username };
         res.status(200).json({ message: 'Login successful', username });
-        console.log("User id: " + req.session.user.id + " logged in");
+        console.log("User id " + req.session.user.id + " logged in");
+        console.log("Session after login: " + req.session);
 
     } catch (error) {
         if (error.message === "User not found") {
@@ -154,6 +156,21 @@ exp.post('/users/logout', (req, res) => {
 });
 
 // Test session endpoint
+/*exp.get('/test-session', authenticateUser, (req, res) => {
+    try {
+      if (req.user) {
+        res.status(200).json({
+          message: 'Session is active',
+          user: req.session.user // Include only necessary info
+        });
+      } else {
+        res.status(401).json({ message: 'No active session' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+  });*/
+
 exp.get('/test-session', (req, res) => {
     if (req.session.user) {
         res.status(200).json({ message: 'Session is active', session: req.session });
@@ -249,8 +266,10 @@ exp.delete('/games/:id', async (req, res) => {
 // LIBRARY ENDPOINTS -=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=--=-=- //
 
 // Create library entry
-exp.post('/libraries', async (req, res) => {
-    const { userId, gameId, status } = req.body;
+exp.post('/libraries', authenticateUser, async (req, res) => {
+    const { gameId, status } = req.body;
+    const userId = req.user.id;
+    console.log("User ID: " + userId);
 
     if (!userId || !gameId || !status) {
         return res.status(400).json({ error: 'UserId, gameId, and status are required' });
@@ -275,8 +294,8 @@ exp.get('/libraries', async (req, res) => {
 });
 
 // Read or fetch all games of a specific user
-exp.get('/userlibrary/:id', async (req, res) => {
-    const userId = req.params.id;
+exp.get('/userlibrary/:id', authenticateUser, async (req, res) => {
+    const userId = req.user.id;
     try {
         const entries = await libraries.readUserLibrary(userId);
         if (entries) {
@@ -290,8 +309,9 @@ exp.get('/userlibrary/:id', async (req, res) => {
 });
 
 // Read or fetch all user games of a specific user with the filter parameters
-exp.get('/libraries/:id/filter', async (req, res) => {
-    const { userId, filter } = req.body;
+exp.get('/libraries/:id/filter', authenticateUser, async (req, res) => {
+    const { filter } = req.body;
+    const userId = req.user.id;
     try {
         const entries = await libraries.filterReadLibrary(userId, filter);
         if (entries) {
@@ -305,8 +325,8 @@ exp.get('/libraries/:id/filter', async (req, res) => {
 });
 
 // Read or fetch all user games of a specific user with the set player count
-exp.get('/libraries/:id/filter', async (req, res) => {
-    const userId = req.params.id;
+exp.get('/libraries/:id/filter', authenticateUser, async (req, res) => {
+    const userId = req.user.id;
     const minPlayers = parseInt(req.query.min, 10);
     const maxPlayers = parseInt(req.query.max, 10);
     try {
