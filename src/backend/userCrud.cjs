@@ -154,7 +154,8 @@ module.exports = {
     readUser,
     updateUser,
     deleteUser,
-    verifyLogin
+    verifyLogin,
+    getUserId
 };
 
 
