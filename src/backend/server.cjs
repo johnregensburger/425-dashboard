@@ -1,6 +1,6 @@
 // Express server that defines HTTP routes or endpoints for all CRUD operations
 const express = require('express');
-//const session = require('express-session');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -54,7 +54,7 @@ exp.post('/login', (req, res) => {
     // Validate credentials (e.g., check database)
     const userId = users.getUserId(username, password);
     if (userId != -1) {
-      req.session.user = { username }; // Save user info in session
+      req.session.user = { id: userId, username }; // Save user info in session
       res.status(200).json({ message: 'Login successful' });
     } else {
       res.status(401).json({ message: 'Invalid credentials' });
