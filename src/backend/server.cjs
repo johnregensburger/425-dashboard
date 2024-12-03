@@ -1,8 +1,8 @@
-// Express server that defines HTTP routes or endpoints for all CRUD operations
+// Express server that defines HTTP routes, especially endpoints for CRUD operations
 const express = require('express');
-const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const session = require('express-session');
 
 const users = require('./userCrud.cjs');
 const games = require('./gameCrud.cjs');
@@ -13,6 +13,35 @@ const port = 3000;
 
 // Use the Body-parser middleware to parse incoming HTTP requests
 exp.use(bodyParser.json());
+
+// Use CORS as well
+exp.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+
+// And use the session-express middleware on top of that
+exp.use(session({
+    secret: '3n@4#zC^d8F!q9J4^w@U9tP*lZ$eT0z',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,                                // Helps prevent XSS
+      secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
+      maxAge: 1000 * 60 * 60                         // 1-hour session
+    }
+}));
+
+// Checks if a session exists—is the user authenticated?
+function authenticateUser(req, res, next) {
+    if (req.session.user) {
+        return next();
+    } else {
+        res.status(401).json({ error: 'Unauthorized access' });
+    }
+}
+
+// Checks if a user is logged in and authorized
 const authorizeUser = (req, res, next) => {
     const sessionUserId = req.session.user?.id;
     const resourceUserId = req.params.id || req.body.userId;
@@ -27,49 +56,6 @@ const authorizeUser = (req, res, next) => {
 
     next(); // User is authorized to access this resource
 };
-
-// Use CORS as well
-exp.use(cors());
-
-// LOGIN =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-
-/*exp.use(session({
-    secret: '3n@4#zC^d8F!q9J4^w@U9tP*lZ$eT0z',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,        // Helps prevent XSS
-      secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
-      maxAge: 1000 * 60 * 60 // 1-hour session
-    }
-}));
-
-exp.listen(port, () => {
-    console.log('Server running on http://localhost:' + port);
-  });
-
-/*exp.post('/login', (req, res) => {
-    const { username, password } = req.body;
-  
-    // Validate credentials (e.g., check database)
-    const userId = users.getUserId(username, password);
-    if (userId != -1) {
-      req.session.user = { id: userId, username }; // Save user info in session
-      res.status(200).json({ message: 'Login successful' });
-    } else {
-      res.status(401).json({ message: 'Invalid credentials' });
-    }
-});
-
-exp.post('/logout', (req, res) => {
-    req.session.destroy(err => {
-      if (err) {
-        return res.status(500).json({ message: 'Logout failed' });
-      }
-      res.clearCookie('connect.sid'); // Clear the session cookie
-      res.status(200).json({ message: 'Logged out successfully' });
-    });
-});*/
 
 // USER ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
@@ -129,22 +115,25 @@ exp.delete('/users/:id', async (req, res) => {
     }
 });
 
-// Validate user
-exp.post('/users/verify-login', async (req, res) => {
+// Login and validate user credentials
+exp.post('/users/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
         const isValid = await users.verifyLogin(username, password);
+
         if (!isValid) {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
-        // If valid, respond with success
-        res.json({ message: 'Login successful', username });
+        // If valid, respond with success and save user info in session
+        const userId = await users.getUserId(username, password);
+        req.session.user = { id: userId, username };
+        res.status(200).json({ message: 'Login successful', username });
 
     } catch (error) {
         if (error.message === "User not found") {
-            return res.status(401).json({ error: 'Invalid username or password' });
+            return res.status(401).json({ error: 'Invalid credentials' });
         }   
         // For other errors, send a 500 response
         console.error("Error validating login:", error.message);
@@ -152,8 +141,25 @@ exp.post('/users/verify-login', async (req, res) => {
     }
 });
 
-// Assign token
+// Logout endpoint
+exp.post('/users/logout', (req, res) => {
+    req.session.destroy(err => {
+      if (err) {
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      res.clearCookie('connect.sid'); // Clear the session cookie
+      res.status(200).json({ message: 'Logged out successfully' });
+    });
+});
 
+// Test session endpoint
+exp.get('/test-session', (req, res) => {
+    if (req.session.user) {
+        res.status(200).json({ message: 'Session is active', session: req.session });
+    } else {
+        res.status(401).json({ message: 'No active session' });
+    }
+});
 
 // GAME ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 

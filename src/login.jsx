@@ -43,7 +43,7 @@ const Login = () => {
       console.log("Sending request to validate user...");
 
 
-      const response = await fetch(`http://localhost:3000/users/verify-login`, {
+      const response = await fetch(`http://localhost:3000/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
