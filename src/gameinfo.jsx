@@ -4,9 +4,33 @@ const GameInfo = () => {
 const { id, loc } = useParams();
 const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [game, setGame] = useState([]);
+const [userId, setuserId] = useState(null);
 const [location, setLocation] = useState();
 
  const navigate = useNavigate();
+
+ const checkLoginStatus = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/test-session', {
+      method: 'GET',
+      credentials: 'include', // Include cookies in the request
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const userId = data.userId; // Extract user ID from response
+      setuserId(userId);
+      setIsLoggedIn(true);
+      console.log('User ID:', userId);
+    } else {
+      const errorData = await response.json();
+      console.error('No active session:', errorData);
+    }
+  } catch (error) {
+    console.error('Error fetching user ID:', error);
+    alert('Error fetching user ID.');
+  }
+};
 
  const logOut = () => {
   setIsLoggedIn((prevState) => !prevState);
@@ -55,11 +79,11 @@ const [location, setLocation] = useState();
   }
 };
 
-const addToLibrary = async () => {
+const addToLibrary = async (userId) => {
   try {
     console.log("Adding to user library...");
 
-    const response = await fetch(`http://localhost:3000/libraries`, {
+    const response = await fetch(`http://localhost:3000/libraries/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -85,11 +109,11 @@ const addToLibrary = async () => {
   }
 }
 
-const removeFromLibrary = async () => {
+const removeFromLibrary = async (userId) => {
   try {
     console.log("Removing from user library...");
 
-    const response = await fetch(`http://localhost:3000/libraries/${id}`, {
+    const response = await fetch(`http://localhost:3000/libraries/${userId}`, {
       method: 'DELETE',
     }); //fix parameter
     
@@ -115,6 +139,7 @@ const removeFromLibrary = async () => {
 useEffect(() => {
   fetchGame();
   checkLoc(loc);
+  checkLoginStatus();
 }, [id, loc]);
 
 
@@ -194,7 +219,7 @@ const nicerParagraph = (desc) => {
             <div className="mini-container">
               {location ? (
                   isLoggedIn ? (
-                    <button className="filter" onClick={addToLibrary}>
+                    <button className="filter" onClick={addToLibrary(userId)}>
                       Add to my Library {/* Is Logged in */}
                     </button>
                   ) : (
@@ -202,7 +227,7 @@ const nicerParagraph = (desc) => {
                       Add to my Library {/* Is Logged OUT */}
                     </button>
                   )) : (
-                    <button className="filter" onClick={removeFromLibrary}>
+                    <button className="filter" onClick={removeFromLibrary(userId)}>
                       Remove from my Library {/* Is Logged in */}
                     </button>
                 )}

@@ -9,6 +9,30 @@ const Library = () => {
  const [isLoggedIn, setIsLoggedIn] = useState(false);
  const [games, setGames] = useState([]);
  const [visibleGames, setVisibleGames] = useState(20);
+ const [userId, setuserId] = useState(null);
+
+ const checkLoginStatus = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/test-session', {
+      method: 'GET',
+      credentials: 'include', // Include cookies in the request
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const userId = data.userId; // Extract user ID from response
+      setuserId(userId);
+      setIsLoggedIn(true);
+      console.log('User ID:', userId);
+    } else {
+      const errorData = await response.json();
+      console.error('No active session:', errorData);
+    }
+  } catch (error) {
+    console.error('Error fetching user ID:', error);
+    alert('Error fetching user ID.');
+  }
+};
 
  const goToFront = () => { //navigate to front page  
     navigate('/front');
@@ -64,7 +88,8 @@ const Library = () => {
   };
     
   useEffect(() => {
-    fetchGames();
+    checkLoginStatus();
+    fetchGames(userId);
   }, []);
 
     //TO-DO change "user library" to the user's name in the main section
