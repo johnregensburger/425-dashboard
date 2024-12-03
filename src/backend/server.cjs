@@ -273,8 +273,7 @@ exp.delete('/games/:id', async (req, res) => {
 
 // Create library entry
 exp.post('/libraries', async (req, res) => {
-    const {gameId, status } = req.body;
-    const userId = req.session.user?.id;
+    const {userId, gameId, status } = req.body;
 
     if (!userId || !gameId || !status) {
         return res.status(400).json({ error: 'UserId, gameId, and status are required' });

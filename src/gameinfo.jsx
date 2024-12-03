@@ -67,7 +67,7 @@ const [location, setLocation] = useState();
 
  const fetchGame = async () => {
   try {
-    const response = await fetch(`http://localhost:3000/games/${id}`);
+    const response = await fetch(`http://localhost:3000/games/${userId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch game');
     }
@@ -82,14 +82,15 @@ const [location, setLocation] = useState();
 const addToLibrary = async (status) => {
   try {
     console.log("Adding to user library...");
-
+    console.log(userId, status, id);
     const response = await fetch(`http://localhost:3000/libraries`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        id: id,
+        userId: userId,
+        gameId: id,
         status: status,
       }),
       credentials: 'include',
