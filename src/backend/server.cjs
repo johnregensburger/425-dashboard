@@ -33,15 +33,15 @@ exp.use(session({
 }));
 
 
-// Checks if a session exists—is the user authenticated?
-function authenticateUser(req, res, next) {
-    if (req.session && req.session.user) {
-        req.user = req.session.user;
-        next();
-    } else {
-        res.status(401).json({ error: 'Unauthorized access' });
-    }
-}
+// // Checks if a session exists—is the user authenticated?
+// function authenticateUser(req, res, next) {
+//     if (req.session && req.session.user) {
+//         req.user = req.session.user;
+//         next();
+//     } else {
+//         res.status(401).json({ error: 'Unauthorized access' });
+//     }
+// }
 
 // Checks if a user is logged in and authorized
 const authorizeUser = (req, res, next) => {
@@ -273,8 +273,8 @@ exp.delete('/games/:id', async (req, res) => {
 
 // Create library entry
 exp.post('/libraries', async (req, res) => {
-    const { userId, gameId, status } = req.body;
-    console.log("User ID: " + userId);
+    const {gameId, status } = req.body;
+    const userId = req.session.user?.id;
 
     if (!userId || !gameId || !status) {
         return res.status(400).json({ error: 'UserId, gameId, and status are required' });
@@ -299,7 +299,7 @@ exp.get('/libraries', async (req, res) => {
 });
 
 // Read or fetch all games of a specific user
-exp.get('/userlibrary/:id', authenticateUser, async (req, res) => {
+exp.get('/userlibrary/:id', async (req, res) => {
     const userId = req.user.id;
     try {
         const entries = await libraries.readUserLibrary(userId);
@@ -314,7 +314,7 @@ exp.get('/userlibrary/:id', authenticateUser, async (req, res) => {
 });
 
 // Read or fetch all user games of a specific user with the filter parameters
-exp.get('/libraries/:id/filter', authenticateUser, async (req, res) => {
+exp.get('/libraries/:id/filter', async (req, res) => {
     const { filter } = req.body;
     const userId = req.user.id;
     try {
@@ -330,7 +330,7 @@ exp.get('/libraries/:id/filter', authenticateUser, async (req, res) => {
 });
 
 // Read or fetch all user games of a specific user with the set player count
-exp.get('/libraries/:id/filter', authenticateUser, async (req, res) => {
+exp.get('/libraries/:id/filter', async (req, res) => {
     const userId = req.user.id;
     const minPlayers = parseInt(req.query.min, 10);
     const maxPlayers = parseInt(req.query.max, 10);

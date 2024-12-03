@@ -79,7 +79,7 @@ const [location, setLocation] = useState();
   }
 };
 
-const addToLibrary = async (userId, status) => {
+const addToLibrary = async (status) => {
   try {
     console.log("Adding to user library...");
 
@@ -89,10 +89,10 @@ const addToLibrary = async (userId, status) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        userId: userId,
         id: id,
         status: status,
-      }), //UserId, gameId, and status
+      }),
+      credentials: 'include',
     });
     
     const data = await response.json();
@@ -218,7 +218,7 @@ const nicerParagraph = (desc) => {
             <div className="mini-container">
               {location ? (
                   isLoggedIn ? (
-                    <button className="filter" onClick={() => addToLibrary(userId, "owned")}>
+                    <button className="filter" onClick={() => addToLibrary("owned")}>
                       Add to my Library {/* Is Logged in */}
                     </button>
                   ) : (
@@ -226,7 +226,7 @@ const nicerParagraph = (desc) => {
                       Add to my Library {/* Is Logged OUT */}
                     </button>
                   )) : (
-                    <button className="filter" onClick={() => removeFromLibrary(userId, "owned")}>
+                    <button className="filter" onClick={() => removeFromLibrary("owned")}>
                       Remove from my Library {/* Is Logged in */}
                     </button>
                 )}
