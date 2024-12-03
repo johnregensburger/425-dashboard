@@ -38,7 +38,7 @@ exp.use((req, res, next) => {
     } else {
       req.user = null;
     }
-    console.log('Session data:', req.session);
+    //console.log('Session data:', req.session);
     next();
 });
 
@@ -307,7 +307,8 @@ exp.get('/libraries', async (req, res) => {
 });
 
 // Read or fetch all games of a specific user
-exp.get('/userlibrary/:id', async (req, res) => { // Add authorizeUser middleware here
+exp.get('/userlibrary/:id', authorizeUser, async (req, res) => { // Add authorizeUser middleware here
+    //console.log(req);
     const userId = req.user.id;
     console.log(req.user.id);
     try {
