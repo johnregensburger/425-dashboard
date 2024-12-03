@@ -52,7 +52,7 @@ exp.use((req, res, next) => {
 //     }
 // }
 
-// Checks if a user is logged in and authorized
+/*// Checks if a user is logged in and authorized
 const authorizeUser = (req, res, next) => {
     const sessionUserId = req.session.user?.id;
     const resourceUserId = req.params.id || req.body.userId;
@@ -66,7 +66,7 @@ const authorizeUser = (req, res, next) => {
     }
 
     next(); // User is authorized to access this resource
-};
+};*/
 
 // USER ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
@@ -142,7 +142,7 @@ exp.post('/users/login', async (req, res) => {
         req.session.user = { id: userId, username };
         res.status(200).json({ message: 'Login successful', username });
         console.log("User id " + req.session.user.id + " logged in");
-        console.log("Session after login: ", req.session); // Use comma for better logging
+        //console.log("Session after login: ", req.session); // Use comma for better logging
 
     } catch (error) {
         if (error.message === "User not found") {
@@ -307,14 +307,15 @@ exp.get('/libraries', async (req, res) => {
 });
 
 // Read or fetch all games of a specific user
-exp.get('/userlibrary/:id', authorizeUser, async (req, res) => { // Add authorizeUser middleware here
+exp.get('/userlibrary/:id', async (req, res) => { // Add authorizeUser middleware here
     //console.log(req);
     const userId = req.user.id;
-    console.log(req.user.id);
+    console.log("User ID: " + req.user.id);
     try {
         const entries = await libraries.readUserLibrary(userId);
         if (entries) {
             res.json(entries);
+            //console.log("Library entries found for user "+ userId);
         } else {
             res.status(404).send('Library entries not found');
         }

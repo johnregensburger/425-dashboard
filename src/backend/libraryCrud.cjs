@@ -5,16 +5,19 @@ const games = require("./gameCrud.cjs");
 
 // Creates a library entry based on the user and what game they've wishlisted or now own
 async function createEntry(userId, gameId, status) {
-    let username = users.readUser(userId).username;
-    let gameName = games.readGame(gameId).gameName;
+    let user = await users.readUser(userId);
+    let username = user.username;
+    let game = await games.readGame(gameId);
+    let gameName = game.gameName;
+    let boxArtUrl = games.boxArtUrl;
     await new Promise((resolve, reject) => {
         try {
             db.run(
                 `
-                INSERT OR IGNORE INTO UserLibrary (userId, gameId, username, gameName, status)
+                INSERT OR IGNORE INTO UserLibrary (userId, gameId, gameName, boxArtUrl, status)
                 VALUES (?, ?, ?, ?, ?)
                 `,
-                [userId, gameId, username, gameName, status],
+                [userId, gameId, gameName, boxArtUrl, status],
                 function (e) {
                     if (e) {
                         console.error(`ERR: Library entry creation failed. See below:`);
@@ -37,7 +40,7 @@ async function readEntry(id) {
     return new Promise((resolve, reject) => {
         db.get(
             `
-            SELECT ownershipId, userId, gameId, username, gameName, status
+            SELECT ownershipId, userId, gameId, gameName, boxArtUrl, status
             FROM UserLibrary
             WHERE ownershipId = ?
             `,
@@ -60,7 +63,7 @@ async function readAllLibrary() {
     return new Promise((resolve, reject) => {
         db.all(
             `
-            SELECT ownershipId, userId, gameId, username, gameName, status
+            SELECT ownershipId, userId, gameId, gameName, boxArtUrl, status
             FROM UserLibrary
             `,
             function (e, rows) {
@@ -82,7 +85,7 @@ async function readUserLibrary(id) {
     return new Promise((resolve, reject) => {
         db.all(
             `
-            SELECT ownershipId, userId, gameId, username, gameName, status
+            SELECT ownershipId, userId, gameId, gameName, boxArtUrl, status
             FROM UserLibrary
             WHERE userId = ?
             `,
@@ -106,7 +109,7 @@ async function filterReadLibrary(id, filter) {
     return new Promise((resolve, reject) => {
         db.all(
             `
-            SELECT ownershipId, userId, gameId, username, gameName, status
+            SELECT ownershipId, userId, gameId, gameName, boxArtUrl, status
             FROM UserLibrary
             WHERE userId LIKE ?
             AND (gameName LIKE ?

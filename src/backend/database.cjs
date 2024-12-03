@@ -46,8 +46,8 @@ db.serialize(() => {
             ownershipId INTEGER PRIMARY KEY AUTOINCREMENT,
             userId INTEGER,
             gameId INTEGER,
-            username TEXT,
             gameName TEXT,
+            boxArtUrl TEXT,
             status TEXT CHECK(status IN ('owned', 'wishlisted')),
             FOREIGN KEY(userId) REFERENCES Users(userId),
             FOREIGN KEY(gameId) REFERENCES Games(gameId)
