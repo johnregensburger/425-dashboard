@@ -36,10 +36,10 @@ const checkLoginStatus = async () => {
   try{
     const response = await fetch(`http://localhost:3000/test-session`);
     if(!response.ok){
-      setIsLoggedIn = false;
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
     }
-
-    setIsLoggedIn = true;
   } catch(error){
     console.error('Error fetching session');
   }
