@@ -19,7 +19,7 @@ const checkLoginStatus = async () => {
 
     if (response.ok) {
       const data = await response.json();
-      const userId = data.userId; // Extract user ID from response
+      const userId = data.userID; // Extract user ID from response
       setIsLoggedIn(true);
       console.log('User ID:', userId);
     } else {
