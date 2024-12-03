@@ -138,6 +138,7 @@ const removeFromLibrary = async (userId) => {
 
 useEffect(() => {
   checkLoginStatus();
+  checkLoc(loc);
   // Ensure userId is set before calling fetchGame
   if (userId) {
     fetchGame();
