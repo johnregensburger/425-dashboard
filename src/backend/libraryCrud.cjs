@@ -78,7 +78,7 @@ async function readAllLibrary() {
 }
 
 // Reads the library of a specific user
-async function readAllUserLibrary(id) {
+async function readUserLibrary(id) {
     return new Promise((resolve, reject) => {
         db.all(
             `
@@ -185,7 +185,7 @@ module.exports = {
     createEntry,
     readEntry,
     readAllLibrary,
-    readAllUserLibrary,
+    readUserLibrary,
     filterReadLibrary,
     filterPlayerNumber,
     updateEntry,

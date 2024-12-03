@@ -243,6 +243,59 @@ exp.post('/libraries', async (req, res) => {
     }
 });
 
+// Read or fetch all games
+exp.get('/libraries', async (req, res) => {
+    try {
+        const allGames = await libraries.readAll();
+        res.json(allGames);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Read or fetch all games of a specific user
+exp.get('/libraries', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const entries = await libraries.readUserLibrary(userId);
+        if (entries) {
+            res.json(entries);
+        } else {
+            res.status(404).send('Library entries not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Read or fetch all user games of a specific user with the filter parameters
+exp.get('/libraries/:id/filter', async (req, res) => {
+    const { userId, filter } = req.body;
+    try {
+        const entries = await libraries.filterReadLibrary(userId, filter);
+        if (entries) {
+            res.json(entries);
+        } else {
+            res.status(404).send('Library entries not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Read or fetch all user games of a specific user with the set player count
+exp.get('/libraries/:id/filter', async (req, res) => {
+    const userId = req.params.id;
+    const minPlayers = parseInt(req.query.min, 10);
+    const maxPlayers = parseInt(req.query.max, 10);
+    try {
+        const filtLibraries = await libraries.filterPlayerNumber(userId,minPlayers,maxPlayers);
+        res.json(filtLibraries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 // Read or fetch library entry (by ID)
 exp.get('/libraries/:id', async (req, res) => {
     try {
