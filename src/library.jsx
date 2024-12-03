@@ -68,8 +68,13 @@ const Library = () => {
     
   useEffect(() => {
     checkLoginStatus();
-    fetchGames(userId);
-  }, []);
+}, []); // This effect runs on component mount to check login status
+
+useEffect(() => {
+    if (userId) { // Only fetch games if userId is not null
+        fetchGames(userId);
+    }
+}, [userId]);
 
     //TO-DO change "user library" to the user's name in the main section
    return ( 
