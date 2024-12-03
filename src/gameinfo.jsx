@@ -56,7 +56,60 @@ const [location, setLocation] = useState();
 };
 
 const addToLibrary = async () => {
-  //add logic here
+  try {
+    console.log("Adding to user library...");
+
+    const response = await fetch(`http://localhost:3000/libraries`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ }), //UserId, gameId, and status
+    });
+    
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.error || 'Response was not okay:');
+      console.log("Library error");
+      alert("An Error Occurred. Please try again.");
+      return;
+    }
+    setMessage(data.message); // successfully added
+    console.log("Library Success");
+    alert(`Game added to your library`);
+
+  } catch(error) {
+    console.error('Error:', error);
+    alert(`Error: ${error.message || 'Unknown Error'}`);
+  }
+}
+
+const removeFromLibrary = async () => {
+  try {
+    console.log("Removing from user library...");
+
+    const response = await fetch(`http://localhost:3000/libraries/${id}`, {
+      method: 'DELETE',
+    }); //fix parameter
+    
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.error || 'Response was not okay:');
+      console.log("Library error");
+      alert("An Error Occurred. Please try again.");
+      return;
+    }
+
+    setMessage(data.message); // successfully deleted
+    console.log("Library Success");
+    alert(`Game removed from your library`);
+
+  } catch(error) {
+    console.error('Error:', error);
+    alert(`Error: ${error.message || 'Unknown Error'}`);
+  }
 }
 
 useEffect(() => {
@@ -139,15 +192,20 @@ const nicerParagraph = (desc) => {
           </div>
           <div className="right-info">
             <div className="mini-container">
-              {isLoggedIn ? (
-                <button className="filter" onClick={addToLibrary}>
-                  Add to my Library
-                </button>
-              ) : (
-                <button className="filter" onClick={logIn}>
-                  Add to my Library
-                </button>
-              )}
+              {location ? (
+                  isLoggedIn ? (
+                    <button className="filter" onClick={addToLibrary}>
+                      Add to my Library {/* Is Logged in */}
+                    </button>
+                  ) : (
+                    <button className="filter" onClick={logIn}>
+                      Add to my Library {/* Is Logged OUT */}
+                    </button>
+                  )) : (
+                    <button className="filter" onClick={removeFromLibrary}>
+                      Remove from my Library {/* Is Logged in */}
+                    </button>
+                )}
               <h2>Players: {game.minPlayers} - {game.maxPlayers}</h2>
               <h2>Age Suggestion: {game.age}+</h2>
               <h2>Avg. Playtime: {game.playTime} min</h2>
