@@ -1,37 +1,73 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Library = () => {
-    console.log('Login component rendered!');
-
  const navigate = useNavigate();
- 
  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
  const [fromValue, setFromValue] = React.useState(1);
  const [toValue, setToValue] = React.useState(8);
  const [isLoggedIn, setIsLoggedIn] = useState(false);
+ const [games, setGames] = useState([]);
+ const [visibleGames, setVisibleGames] = useState(20);
 
  const goToFront = () => { //navigate to front page  
-        navigate('/front');
-    }
+    navigate('/front');
+  }
   
-  const goToInfo = () => {  //NEEDS TO BE ADJUSTED PER GAME
-      navigate('/info');
+  const goToInfo = (id, loc) => {
+    navigate(`/info/${id}/${loc.toString()}`);
   }
 
-const logOut = () => {
+  const logOut = () => {
     setIsLoggedIn((prevState) => !prevState);
-        navigate('/'); // Navigate to the Login page
-    };
-    
-    const logIn = () => {
     navigate('/'); // Navigate to the Login page
+  };
+    
+  const logIn = () => {
+    navigate('/'); // Navigate to the Login page
+  }
+    
+  const toggleSidebar = () => {
+      setIsSidebarOpen(prevState => !prevState);
+  };
+
+  const fetchGames = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/games`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch games');
+      }
+      console.log('games fetched');
+      const data = await response.json(); // Fetch the data
+      setGames(data); //updates the state
+    } catch (error) {
+      console.error('Error fetching games:', error);
     }
+  };
+
+  const fetchFilter = async (fromValue, toValue) => {
+    try {
+      const response = await fetch(`http://localhost:3000/games/filter?minPlayers=${fromValue}&maxPlayers=${toValue}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch games');
+      }
+      console.log('games fetched');
+      const data = await response.json(); // Fetch the data
+      setGames(data); //updates the state
+    } catch (error) {
+      console.error('Error fetching games:', error);
+    }
+  };
+
+  const loadMoreGames = () => { //loads more games into the scrollbox
+    setVisibleGames((prev) => Math.min(prev + 20, games.length));
+  };
     
-    const toggleSidebar = () => {
-        setIsSidebarOpen(prevState => !prevState);
-    };
-    
+  useEffect(() => {
+    fetchGames();
+  }, []);
+
+    //TO-DO change "user library" to the user's name in the main section
    return ( 
     <div className={`app ${isSidebarOpen ? "sidebar-open" : ""}`}>
       {/* Header Section */}
@@ -59,7 +95,7 @@ const logOut = () => {
     
       {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <button className="close-btn" onClick={toggleSidebar}>
+        <button className="filter" onClick={toggleSidebar}>
           ×
         </button>
         <h2>Filter</h2>
@@ -92,18 +128,33 @@ const logOut = () => {
             <span>Max: {toValue}</span>
           </div>
         </div>
+        <button className="filter" onClick={() => fetchFilter(fromValue, toValue)}>Filter</button>
       </div>
     <main>
-    <h1>User Library</h1>
+    <h1>User Library</h1> 
         {/* Container for the scrollable button grid */}
-        <div className="button-grid">
-          {[...Array(20)].map((_, index) => (
-            <button key={index} className="grid-item" onClick={goToInfo}>
-              <img src={`https://via.placeholder.com/150`} alt={`Game ${index + 1}`} className="grid-item-img" />
-              <span className="grid-item-text">Game {index + 1}</span>
-            </button>
-          ))}
-        </div>
+        <div className="button-grid" 
+      onScroll={(e) => {
+          const { scrollTop, scrollHeight, clientHeight } = e.target;
+          if (scrollTop + clientHeight >= scrollHeight - 10) {loadMoreGames();}}}>
+
+        {/* maps each game into its own button */}
+        {games.length === 0 ? (<p>No games available.</p>) : (
+            games.slice(0, visibleGames).map((game) => (
+                <button
+                    key={game.gameId}
+                    className="grid-item"
+                    onClick={() => goToInfo(game.gameId, false)}
+                    aria-label={`View details for ${game.gameName}`}>
+                    <img
+                        src={game.boxArtUrl} // Ensure property matches your backend
+                        alt={`${game.gameName}`}
+                        className="grid-item-img"/>
+                    <span className="grid-item-text">{game.gameName}</span>
+                </button>
+            ))
+        )}
+      </div>
     </main>
   </div>
    );

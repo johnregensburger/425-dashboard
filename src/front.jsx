@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Front = () => {
 
+const navigate = useNavigate();
 const [isLoggedIn, setIsLoggedIn] = useState(true);
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 const [fromValue, setFromValue] = React.useState(1);
@@ -13,8 +14,6 @@ const [visibleGames, setVisibleGames] = useState(20); // Start by showing 20 gam
 const toggleSidebar = () => {
   setIsSidebarOpen(prevState => !prevState);
 };
-
- const navigate = useNavigate();
 
  const logOut = () => {
   setIsLoggedIn((prevState) => !prevState);
@@ -29,9 +28,8 @@ const toggleSidebar = () => {
   navigate('/library');
  }
 
- const goToInfo = (id) => {
-  console.log(`going to ${id} page`);
-  navigate(`/info/${id}`);
+ const goToInfo = (id, loc) => {
+  navigate(`/info/${id}/${loc}`);
 }
 
 const checkLoginStatus = () => {
@@ -39,7 +37,6 @@ const checkLoginStatus = () => {
 }
 
 const fetchGames = async () => {
-  
   try {
     const response = await fetch(`http://localhost:3000/games`);
     if (!response.ok) {
@@ -158,7 +155,7 @@ useEffect(() => {
                 <button
                     key={game.gameId}
                     className="grid-item"
-                    onClick={() => goToInfo(game.gameId)}
+                    onClick={() => goToInfo(game.gameId, "true")}
                     aria-label={`View details for ${game.gameName}`}>
                     <img
                         src={game.boxArtUrl} // Ensure property matches your backend

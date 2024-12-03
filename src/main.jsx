@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
        <Route path='/front' element={<Front />}/> {/* Front page */}
        <Route path='/loginCreate' element={<Create />}/> {/* Create a new user page */}
        <Route path='/library' element={<Library />}/> {/*User Library*/}
-       <Route path='/info/:id' element={<GameInfo />}/> {/*Individual Game information*/}
+       <Route path='/info/:id/:loc' element={<GameInfo />}/> {/*Individual Game information*/}
      </Routes>
    </Router>
   </React.StrictMode>,
