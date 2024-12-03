@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 const Front = () => {
 
 const navigate = useNavigate();
-const [isLoggedIn, setIsLoggedIn] = useState(true);
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 const [fromValue, setFromValue] = React.useState(1);
 const [toValue, setToValue] = React.useState(8);

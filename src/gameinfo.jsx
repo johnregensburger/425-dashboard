@@ -55,6 +55,10 @@ const [location, setLocation] = useState();
   }
 };
 
+const addToLibrary = async () => {
+  //add logic here
+}
+
 useEffect(() => {
   fetchGame();
   checkLoc(loc);
@@ -135,6 +139,15 @@ const nicerParagraph = (desc) => {
           </div>
           <div className="right-info">
             <div className="mini-container">
+              {isLoggedIn ? (
+                <button className="filter" onClick={addToLibrary}>
+                  Add to my Library
+                </button>
+              ) : (
+                <button className="filter" onClick={logIn}>
+                  Add to my Library
+                </button>
+              )}
               <h2>Players: {game.minPlayers} - {game.maxPlayers}</h2>
               <h2>Age Suggestion: {game.age}+</h2>
               <h2>Avg. Playtime: {game.playTime} min</h2>
