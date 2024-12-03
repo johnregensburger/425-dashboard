@@ -14,7 +14,7 @@ async function createEntry(userId, gameId, status) {
                 INSERT OR IGNORE INTO UserLibrary (userId, gameId, username, gameName, status)
                 VALUES (?, ?, ?, ?, ?)
                 `,
-                [userId, username, gameId, gameName, status],
+                [userId, gameId, username, gameName, status],
                 function (e) {
                     if (e) {
                         console.error(`ERR: Library entry creation failed. See below:`);
