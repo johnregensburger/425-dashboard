@@ -18,7 +18,7 @@ const [location, setLocation] = useState();
 
     if (response.ok) {
       const data = await response.json();
-      const userId = data.userId; // Extract user ID from response
+      const userId = data.userID; // Extract user ID from response
       setuserId(userId);
       setIsLoggedIn(true);
       console.log('User ID:', userId);
