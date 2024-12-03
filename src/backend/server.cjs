@@ -33,7 +33,7 @@ exp.use(cors());
 
 // LOGIN =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 
-exp.use(session({
+/*exp.use(session({
     secret: '3n@4#zC^d8F!q9J4^w@U9tP*lZ$eT0z',
     resave: false,
     saveUninitialized: false,
@@ -48,7 +48,7 @@ exp.listen(port, () => {
     console.log('Server running on http://localhost:' + port);
   });
 
-exp.post('/login', (req, res) => {
+/*exp.post('/login', (req, res) => {
     const { username, password } = req.body;
   
     // Validate credentials (e.g., check database)
@@ -69,7 +69,7 @@ exp.post('/logout', (req, res) => {
       res.clearCookie('connect.sid'); // Clear the session cookie
       res.status(200).json({ message: 'Logged out successfully' });
     });
-});
+});*/
 
 // USER ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
