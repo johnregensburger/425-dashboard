@@ -19,9 +19,9 @@ const checkLoginStatus = async () => {
 
     if (response.ok) {
       const data = await response.json();
-      const userId = data.userId; // Extract user ID from response
+      const userId = data.userID; // Extract user ID from response
       setIsLoggedIn(true);
-      console.log('User ID:', userId);
+      console.log('User ID:', userID);
     } else {
       const errorData = await response.json();
       console.error('No active session:', errorData);
