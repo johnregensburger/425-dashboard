@@ -122,12 +122,40 @@ async function verifyLogin(username, password) {
     }
 }
 
+// Wrapper function for verifyLogin that returns userID rather than true/false
+async function getUserId(username, password) {
+    const loggedIn = await verifyLogin(username, password);
+    if (loggedIn) {
+        const id = await new Promise((resolve, reject) => {
+            db.get(
+                `
+                SELECT userId FROM Users
+                WHERE username = ?
+                `,
+                [username],
+                (e, row) => {
+                    if (e) {
+                        reject(e); // Reject if there's an error
+                    }
+                    if (!row) {
+                        return reject(-1); // Reject if user is not found
+                    }
+                    resolve(row.userId); // Return userId
+                }
+            );
+        })
+    } else {
+        return -1; // If no user found
+    }
+}
+
 module.exports = {
     createUser,
     readUser,
     updateUser,
     deleteUser,
-    verifyLogin
+    verifyLogin,
+    getUserId
 };
 
 
