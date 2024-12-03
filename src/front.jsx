@@ -3,13 +3,34 @@ import { useNavigate } from 'react-router-dom';
 const Front = () => {
 
 const navigate = useNavigate();
-const [isLoggedIn, setIsLoggedIn] = useState();
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-const [fromValue, setFromValue] = React.useState(1);
-const [toValue, setToValue] = React.useState(8);
+const [fromValue, setFromValue] = useState(1);
+const [toValue, setToValue] = useState(8);
 const [games, setGames] = useState([]);
 const [visibleGames, setVisibleGames] = useState(20); // Start by showing 20 games
 
+const checkLoginStatus = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/test-session', {
+      method: 'GET',
+      credentials: 'include', // Include cookies in the request
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const userId = data.userId; // Extract user ID from response
+      setIsLoggedIn(true);
+      console.log('User ID:', userId);
+    } else {
+      const errorData = await response.json();
+      console.error('No active session:', errorData);
+    }
+  } catch (error) {
+    console.error('Error fetching user ID:', error);
+    alert('Error fetching user ID.');
+  }
+};
 
 const toggleSidebar = () => {
   setIsSidebarOpen(prevState => !prevState);
@@ -30,19 +51,6 @@ const toggleSidebar = () => {
 
  const goToInfo = (id, loc) => {
   navigate(`/info/${id}/${loc}`);
-}
-
-const checkLoginStatus = async () => {
-  try{
-    const response = await fetch(`http://localhost:3000/test-session`);
-    if(!response.ok){
-      setIsLoggedIn(false);
-    } else {
-      setIsLoggedIn(true);
-    }
-  } catch(error){
-    console.error('Error fetching session');
-  }
 }
 
 const fetchGames = async () => {

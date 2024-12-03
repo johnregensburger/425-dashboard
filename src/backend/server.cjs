@@ -32,6 +32,7 @@ exp.use(session({
     }
 }));
 
+
 // Checks if a session exists—is the user authenticated?
 function authenticateUser(req, res, next) {
     if (req.session && req.session.user) {
@@ -171,13 +172,18 @@ exp.post('/users/logout', (req, res) => {
     }
   });*/
 
-exp.get('/test-session', (req, res) => {
-    if (req.session.user) {
-        res.status(200).json({ message: 'Session is active', session: req.session });
+  exp.get('/test-session', (req, res) => {
+    if (req.session && req.session.user) {
+      const userId = req.session.user.id; // Extract user ID from the session
+      res.status(200).json({
+        message: 'Session is active',
+        userID: userId, // Return user ID
+        session: req.session,
+      });
     } else {
-        res.status(401).json({ message: 'No active session' });
+      res.status(401).json({ message: 'No active session' });
     }
-});
+  });
 
 // GAME ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 

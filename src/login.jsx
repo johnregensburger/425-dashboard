@@ -50,23 +50,28 @@ const Login = () => {
         body: JSON.stringify({ username: user, password: pass }),
         credentials: 'include' // Include credentials in the request
       });
-      
-      const data = await response.json();
 
-      if (!response.ok) {
-        setMessage(data.error || 'Invalid username or password'); // Error
-        alert("Invalid username or password. Please try again.");
-        setFormData({ username: '', password: '' }); // Reset form on invalid login
-        return;
+      if(!response.ok){
+        const error = await response.json();
+        setMessage(error.error || 'Invalid username or password'); // Error
+          alert("Invalid username or password. Please try again.");
+          setFormData({ username: '', password: '' }); // Reset form on invalid login
+          return;
       }
 
-      setMessage(data.message); // Login successful
-      console.log("User validated:", data);
+      const data = await response.json();
 
-      alert(`Welcome, ${data.username}!`);
-      setFormData({ username: '', password: '' });
-      navigate('/front');     
-
+      if (response.ok) {
+        setMessage(data.message); // Login successful
+        console.log("User validated:", data);  
+        alert(`Welcome, ${data.username}!`);
+        setFormData({ username: '', password: '' });
+        navigate('/front');
+      } else {
+        const error = await response.json();
+        console.error('Failed:', error);
+        alert('An error has occurred.');
+      }
     } catch(error) {
       console.error('Error:', error);
       alert(`Error: ${error.message || 'Unknown Error'}`);
