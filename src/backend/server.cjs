@@ -14,7 +14,6 @@ const port = 3000;
 // Use the Body-parser middleware to parse incoming HTTP requests
 exp.use(bodyParser.json());
 
-// Use CORS as well
 exp.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
