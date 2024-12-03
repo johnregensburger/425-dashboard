@@ -425,4 +425,5 @@ input[type="range"]::-webkit-slider-runnable-track {
   overflow-x: hidden;
   white-space: normal;
   max-width: 500px;
+  scrollbar-color: #5F3536 #2D0F13 ;
 }

@@ -31,9 +31,9 @@ const Library = () => {
       setIsSidebarOpen(prevState => !prevState);
   };
 
-  const fetchGames = async () => {
+  const fetchGames = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/games`);
+      const response = await fetch(`http://localhost:3000/userlibrary/${id}`);
       if (!response.ok) {
         throw new Error('Failed to fetch games');
       }
