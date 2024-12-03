@@ -13,15 +13,28 @@ const port = 3000;
 
 // Use the Body-parser middleware to parse incoming HTTP requests
 exp.use(bodyParser.json());
+const authorizeUser = (req, res, next) => {
+    const sessionUserId = req.session.user?.id;
+    const resourceUserId = req.params.id || req.body.userId;
+
+    if (!sessionUserId) {
+        return res.status(401).json({ message: 'Unauthorized: No active session' });
+    }
+
+    if (sessionUserId !== parseInt(resourceUserId, 10)) {
+        return res.status(403).json({ message: 'Forbidden: Access to this resource is not allowed' });
+    }
+
+    next(); // User is authorized to access this resource
+};
 
 // Use CORS as well
 exp.use(cors());
-/*
+
 // LOGIN =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-// Praying to whatever's out there that this works
 
 exp.use(session({
-    secret: 'yourSecretKey', // Replace with a secure, random string
+    secret: '3n@4#zC^d8F!q9J4^w@U9tP*lZ$eT0z',
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -39,7 +52,8 @@ exp.post('/login', (req, res) => {
     const { username, password } = req.body;
   
     // Validate credentials (e.g., check database)
-    if (users.verifyLogin(username, password)) {
+    const userId = users.getUserId(username, password);
+    if (userId != -1) {
       req.session.user = { username }; // Save user info in session
       res.status(200).json({ message: 'Login successful' });
     } else {
@@ -55,7 +69,7 @@ exp.post('/logout', (req, res) => {
       res.clearCookie('connect.sid'); // Clear the session cookie
       res.status(200).json({ message: 'Logged out successfully' });
     });
-});*/
+});
 
 // USER ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
