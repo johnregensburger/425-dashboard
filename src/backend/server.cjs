@@ -130,6 +130,7 @@ exp.post('/users/login', async (req, res) => {
         const userId = await users.getUserId(username, password);
         req.session.user = { id: userId, username };
         res.status(200).json({ message: 'Login successful', username });
+        console.log("User id: " + req.session.user.id + " logged in"); // How can I print out the userId which is linked to the user's database ID?
 
     } catch (error) {
         if (error.message === "User not found") {

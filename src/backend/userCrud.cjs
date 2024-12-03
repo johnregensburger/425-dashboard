@@ -135,7 +135,7 @@ async function getUserId(username, password) {
                 [username],
                 (e, row) => {
                     if (e) {
-                        reject(e); // Reject if there's an error
+                        return reject(-1); // Reject if there's an error
                     }
                     if (!row) {
                         return reject(-1); // Reject if user is not found
@@ -143,7 +143,8 @@ async function getUserId(username, password) {
                     resolve(row.userId); // Return userId
                 }
             );
-        })
+        });
+        return id;
     } else {
         return -1; // If no user found
     }
