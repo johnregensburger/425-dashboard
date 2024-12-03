@@ -3,6 +3,8 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || '3n@4#zC^d8F!q9J4^w@U9tP*lZ$eT0z';
 
 const users = require('./userCrud.cjs');
 const games = require('./gameCrud.cjs');
@@ -140,7 +142,18 @@ exp.post('/users/verify-login', async (req, res) => {
         }
 
         // If valid, respond with success
-        res.json({ message: 'Login successful', username });
+        else {
+            /*const token = jwt.sign(
+                { id: user.id, username },  // Payload
+                JWT_SECRET,                // Secret key
+                { expiresIn: '1h' }        // Token expiration
+            );
+            res.status(200).json({
+                message: 'Login successful',
+                token, // Send the token to the client
+            });*/
+            res.json({message: 'Login successful', username});
+        }
 
     } catch (error) {
         if (error.message === "User not found") {
