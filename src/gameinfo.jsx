@@ -48,13 +48,13 @@ const GameInfo = () => {
   };
 
   const checkLoc = (where) => {  //called as soon as page loads, loc from parameters is passed in
-  if(where === "true")          //if true was passed in, they came from the database
+  if(where === "true") //if true was passed in, they came from the database
     setLocation(true);        
   else
-    setLocation(false);         //theres no other option so they came from the library
+    setLocation(false); //theres no other option so they came from the library
   };
 
-  const navLoc = () => {   //called when user clicks the back button
+  const navLoc = () => { //called when user clicks the back button
   if(loc === "true")
     navigate('/front'); // navigate to database
   else
@@ -79,23 +79,24 @@ const GameInfo = () => {
       const response = await fetch(`http://localhost:3000/libraries`, {
         method: 'POST', //posting to user's library
         headers: {
-          'Content-Type': 'application/json',   //verifies that its a json response
+          'Content-Type': 'application/json', //verifies that its a json response
         },
         body: JSON.stringify({ 
           userId: userId,
-          gameId: id,         //data passed into fetch
+          gameId: id,    //data passed into fetch
           status: status,
         }),
         credentials: 'include', //include userId
       });
 
       if (!response.ok) {
+        alert('Either game already exists or another error has occured')
         console.log("Library error");
         return;
       }
       console.log("Library Success");
       alert(`Game added to your library`);  //lets the user know that it was successful
-    } catch(error) {
+    }catch(error) {
       console.error('Error:', error);
       alert(`Error: ${error.message || 'Unknown Error'}`);
   }};

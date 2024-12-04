@@ -2,99 +2,95 @@ import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Library = () => {
- const navigate = useNavigate();
- const [isLoggedIn, setIsLoggedIn] = useState(false);
- const [games, setGames] = useState([]);
- const [visibleGames, setVisibleGames] = useState(20);
- const [userId, setuserId] = useState(null);
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [games, setGames] = useState([]);
+  const [visibleGames, setVisibleGames] = useState(20);
+  const [userId, setuserId] = useState(null);
 
- const checkLoginStatus = async () => {
-  try {
-    const response = await fetch('http://localhost:3000/test-session', {
-      method: 'GET',
-      credentials: 'include', // Include cookies in the request
-    });
-    console.log("Response: ",response.status);
-    if (response.ok) {
-      const data = await response.json();
-      const userId = data.userID; // Extract user ID from response
-      setuserId(userId);
-      setIsLoggedIn(true);
-      console.log('User ID:', userId);
-    } else {
-      const errorData = await response.json();
-      console.error('No active session:', errorData);
-    }
-  } catch (error) {
-    console.error('Error fetching user ID:', error);
-    alert('Error fetching user ID.');
-  }
-};
+  const checkLoginStatus = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/test-session', {
+        method: 'GET',
+        credentials: 'include', // Includes userid in request
+      });
 
- const goToFront = () => { //navigate to front page  
+      if (response.ok) {
+        const data = await response.json();
+        const userId = data.userID; // Extract user ID from response
+        setuserId(userId);
+        setIsLoggedIn(true);
+        console.log('User ID:', userId);
+      } else {
+        const errorData = await response.json();
+        console.error('No active session:', errorData);
+      }
+    } catch (error) {
+      console.error('Error fetching user ID:', error);
+      alert('Error fetching user ID.');
+  }};
+
+  const goToFront = () => { //navigate to front page  
     navigate('/front');
-  }
-  
-  const goToInfo = (id, loc) => {
-    navigate(`/info/${id}/${loc.toString()}`);
-  }
+  };
+    
+  const goToInfo = (id, loc) => { //passes in game id and where you're coming from
+    navigate(`/info/${id}/${loc.toString()}`); //go to page of game you clicked on
+  };
 
   const logOut = () => {
-    setIsLoggedIn((prevState) => !prevState);
-    navigate('/'); // Navigate to the Login page
+    setIsLoggedIn((prevState) => !prevState); //tells the page youre logged out
+    navigate('/'); // Navigate to the Login page and expires session token(?)
   };
     
   const logIn = () => {
     navigate('/'); // Navigate to the Login page
-  }
+  };
 
   const fetchGames = async (id) => {
-    try {
+    try { //fetches games at specified user id's library
       const response = await fetch(`http://localhost:3000/ulibrary/${id}`);
+
       if (!response.ok) {
         throw new Error('Failed to fetch games');
       }
-      console.log('games fetched');
       const data = await response.json(); // Fetch the data
       setGames(data); //updates the state
     } catch (error) {
       console.error('Error fetching games:', error);
-    }
-  };
+  }};
 
   const loadMoreGames = () => { //loads more games into the scrollbox
     setVisibleGames((prev) => Math.min(prev + 20, games.length));
   };
-    
-  useEffect(() => {
+      
+  useEffect(() => { //this runs as soon as the page starts
     checkLoginStatus();
-}, []); // This effect runs on component mount to check login status
+  }, []); 
 
-useEffect(() => {
-    if (userId) { // Only fetch games if userId is not null
-        fetchGames(userId);
-    }
-}, [userId]);
+  useEffect(() => { //this runs after the first use effect so that it's able to check login status first
+      if (userId) { // Only fetch games if userId is not null
+          fetchGames(userId);
+      }
+  }, [userId]);
 
-    //TO-DO change "user library" to the user's name in the main section
-   return ( 
+  return ( 
     <div >
       {/* Header Section */}
       <header>
-        <div className="header-left">
-        </div>
+        <div className="header-left"></div> {/* only here to keep space */}
         <div className="header-right">
-        <button className="header-btn" onClick={goToFront}>
-          Database
-        </button>
-        {isLoggedIn ? (
-            <button className="header-btn" onClick={logOut}>
-              Log Out
-            </button>
-            ) : (
-              <button className="header-btn" onClick={logIn}>
-                Log In
+          <button className="header-btn" onClick={goToFront}>
+            Database
+          </button>
+          {isLoggedIn ? (
+              <button className="header-btn" onClick={logOut}>
+                Log Out
               </button>
+              ) : (
+                <button className="header-btn" onClick={logIn}>
+                  Log In
+                </button>
             )}
         </div>
       </header>
@@ -126,6 +122,6 @@ useEffect(() => {
       </div>
     </main>
   </div>
-   );
- };
-  export default Library;
+  );
+};
+export default Library;
