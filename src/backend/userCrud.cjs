@@ -29,6 +29,7 @@ async function createUser(username, password) {
     });    
 }
 
+// Read user at specified ID
 async function readUser(id) {
     return new Promise((resolve, reject) => {
         db.get(
@@ -51,6 +52,7 @@ async function readUser(id) {
     });
 }
 
+// Update attribute of user at specified ID with newValue
 async function updateUser(id, column, newValue) {
     if (column == "password") {
         newValue = await encryptPassword(newValue);
@@ -72,8 +74,8 @@ async function updateUser(id, column, newValue) {
     });
 }
 
+// Delete user at specified ID
 async function deleteUser(id) {
-    // Should run the following SQLite query with the corresponding parameters
     await new Promise((resolve, reject) => {
         db.run(
             `
@@ -92,6 +94,7 @@ async function deleteUser(id) {
     });
 }
 
+// Verifies username and password during login
 async function verifyLogin(username, password) {
     try{
     const user = await new Promise((resolve, reject) => {
@@ -158,35 +161,3 @@ module.exports = {
     verifyLogin,
     getUserId
 };
-
-
-/*
-// Verifies user login
-async function verifyLogin(username, password) {
-    return await new Promise((resolve, reject) => {
-        db.get(
-            `
-            SELECT password FROM Users
-            WHERE username = ?
-            `,
-            [username],
-            (err, row) => {
-                if (err) {
-                    console.log(`ERR: User verification failed. See below:`);
-                    console.error(err.message);
-                    reject(err);
-                } else if (!row) {
-                    resolve(false); // User not found
-                } else {
-                    // Compare the provided password with the hashed password
-                    bcrypt.compare(password, row.password)
-                        .then(isMatch => resolve(isMatch))
-                        .catch(compareErr => {
-                            console.error(compareErr.message);
-                            reject(compareErr);
-                        });
-                }
-            }
-        );
-    });
-}*/

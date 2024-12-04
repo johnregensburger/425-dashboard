@@ -42,32 +42,6 @@ exp.use((req, res, next) => {
     next();
 });
 
-// // Checks if a session exists—is the user authenticated?
-// function authenticateUser(req, res, next) {
-//     if (req.session && req.session.user) {
-//         req.user = req.session.user;
-//         next();
-//     } else {
-//         res.status(401).json({ error: 'Unauthorized access' });
-//     }
-// }
-
-/*// Checks if a user is logged in and authorized
-const authorizeUser = (req, res, next) => {
-    const sessionUserId = req.session.user?.id;
-    const resourceUserId = req.params.id || req.body.userId;
-
-    if (!sessionUserId) {
-        return res.status(401).json({ message: 'Unauthorized: No active session' });
-    }
-
-    if (sessionUserId !== parseInt(resourceUserId, 10)) {
-        return res.status(403).json({ message: 'Forbidden: Access to this resource is not allowed' });
-    }
-
-    next(); // User is authorized to access this resource
-};*/
-
 // USER ENDPOINTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 // Create user
@@ -164,22 +138,6 @@ exp.post('/users/logout', (req, res) => {
       res.status(200).json({ message: 'Logged out successfully' });
     });
 });
-
-// Test session endpoint
-/*exp.get('/test-session', authenticateUser, (req, res) => {
-    try {
-      if (req.user) {
-        res.status(200).json({
-          message: 'Session is active',
-          user: req.session.user // Include only necessary info
-        });
-      } else {
-        res.status(401).json({ message: 'No active session' });
-      }
-    } catch (error) {
-      res.status(500).json({ message: 'Internal server error', error: error.message });
-    }
-  });*/
 
   exp.get('/test-session', (req, res) => {
     if (req.session && req.session.user) {
@@ -400,6 +358,7 @@ exp.delete('/libraries/:id', async (req, res) => {
     }
 });
 
+// Delete library entry of specified user and game IDs
 exp.delete('/libraries/:userId/:gameId', async (req, res) => {
     try {
         await libraries.deleteEntryById(req.params.userId, req.params.gameId);
