@@ -80,48 +80,41 @@ const Library = () => {
       <header>
         <div className="header-left"></div> {/* only here to keep space */}
         <div className="header-right">
-          <button className="header-btn" onClick={goToFront}>
-            Database
-          </button>
+          <button className="header-btn" onClick={goToFront}> Database </button>
           {isLoggedIn ? (
-              <button className="header-btn" onClick={logOut}>
-                Log Out
-              </button>
-              ) : (
-                <button className="header-btn" onClick={logIn}>
-                  Log In
-                </button>
-            )}
+            <button className="header-btn" onClick={logOut}>
+              Log Out {/* Logged in */}
+            </button>
+          ) : (
+            <button className="header-btn" onClick={logIn}>
+              Log In  {/* Logged out */}
+            </button>
+          )}
         </div>
       </header>
-  
-    <main>
-    <h1>User Library</h1> 
+      {/* Main Section */}
+      <main>
+        <h1>User Library</h1> 
         {/* Container for the scrollable button grid */}
         <div className="button-grid" 
-      onScroll={(e) => {
-          const { scrollTop, scrollHeight, clientHeight } = e.target;
-          if (scrollTop + clientHeight >= scrollHeight - 10) {loadMoreGames();}}}>
-
-        {/* maps each game into its own button */}
-        {games.length === 0 ? (<p>No games available.</p>) : (
-            games.slice(0, visibleGames).map((game) => (
-                <button
-                    key={game.gameId}
-                    className="grid-item"
-                    onClick={() => goToInfo(game.gameId, false)}
-                    aria-label={`View details for ${game.gameName}`}>
-                    <img
-                        src={game.boxArtUrl} // Ensure property matches your backend
-                        alt={`${game.gameName}`}
-                        className="grid-item-img"/>
-                    <span className="grid-item-text">{game.gameName}</span>
-                </button>
-            ))
-        )}
-      </div>
-    </main>
-  </div>
+          onScroll={(e) => {
+            const { scrollTop, scrollHeight, clientHeight } = e.target;
+            if (scrollTop + clientHeight >= scrollHeight - 10) {loadMoreGames();}}}>
+          {/* maps each game into its own button */}
+          {games.length === 0 ? (<p>No games available.</p>) : 
+          (games.slice(0, visibleGames).map((game) => (
+            <button
+                key={game.gameId}
+                className="grid-item"
+                onClick={() => goToInfo(game.gameId, false)}
+                aria-label={`View details for ${game.gameName}`}>
+                <img src={game.boxArtUrl} alt={`${game.gameName}`} className="grid-item-img"/>
+                <span className="grid-item-text">{game.gameName}</span>
+            </button>
+          )))}
+        </div>
+      </main>
+    </div>
   );
 };
 export default Library;

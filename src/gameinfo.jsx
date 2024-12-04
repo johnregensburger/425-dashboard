@@ -144,10 +144,8 @@ const GameInfo = () => {
     <div >
       {/* Header Section */}
       <header>
-        <div className="header-left">
-          <button className="header-btn" onClick={navLoc}>
-            Back  {/* checks location and naviagates you accordingly */}
-          </button>
+        <div className="header-left"> {/* checks location and naviagates you accordingly */}
+          <button className="header-btn" onClick={navLoc}> Back </button>
         </div>
         <div className="header-right">
           {/* if location is true v */}

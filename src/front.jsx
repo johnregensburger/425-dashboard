@@ -90,9 +90,7 @@ const Front = () => {
     {/* Header Section */}
     <header>
       <div className="header-left">
-        <button className="open-btn" onClick={toggleSidebar}>
-          ☰ Filter
-        </button>
+        <button className="open-btn" onClick={toggleSidebar}> ☰ Filter </button>
       </div>
       <div className="header-right">
         {isLoggedIn ? (
@@ -122,23 +120,9 @@ const Front = () => {
       <h3>Player Number</h3>
       <div className="range_container">
         <div className="sliders_control">
-          <input
-            id="fromSlider"
-            type="range"
-            value={fromValue}
-            min="1"
-            max="8"
-            step="1"
-            aria-label="Minimum player number"
+          <input id="fromSlider" type="range" value={fromValue} min="1" max="8" step="1" aria-label="Minimum player number"
             onChange={(e) => setFromValue(Math.min(e.target.value, toValue - 1))}/>
-          <input
-            id="toSlider"
-            type="range"
-            value={toValue}
-            min="1"
-            max="8"
-            step="1"
-            aria-label="Maximum player number"
+          <input id="toSlider" type="range" value={toValue} min="1" max="8" step="1" aria-label="Maximum player number"
             onChange={(e) => setToValue(Math.max(e.target.value, fromValue + 1))}
           />
         </div>
