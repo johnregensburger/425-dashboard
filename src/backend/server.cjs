@@ -400,6 +400,15 @@ exp.delete('/libraries/:id', async (req, res) => {
     }
 });
 
+exp.delete('/libraries/:userId/:gameId', async (req, res) => {
+    try {
+        await libraries.deleteEntryById(req.params.userId, req.params.gameId);
+        res.status(200).json({ message: 'Library entry deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error,message });
+    }
+});
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 // Start the server
