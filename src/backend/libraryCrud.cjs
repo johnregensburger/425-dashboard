@@ -5,11 +5,32 @@ const games = require("./gameCrud.cjs");
 
 // Creates a library entry based on the user and what game they've wishlisted or now own
 async function createEntry(userId, gameId, status) {
-    let user = await users.readUser(userId);
-    let username = user.username;
     let game = await games.readGame(gameId);
     let gameName = game.gameName;
-    let boxArtUrl = games.boxArtUrl;
+    let boxArtUrl = game.boxArtUrl;
+
+    let existingEntry = await new Promise((resolve, reject) => {
+        db.get(
+            `
+            SELECT * FROM UserLibrary WHERE userId = ? AND gameId = ?
+            `,
+            [userId, gameId],
+            (err, row) => {
+                if (err) {
+                    console.error(`ERR: Failed to check for existing entry. See below:`);
+                    console.error(err.message);
+                    return reject(err);
+                }
+                resolve(row); // `row` will be `undefined` if no entry exists
+            }
+        );
+    });
+
+    if (existingEntry) {
+        console.log("Entry already exists in the library.");
+        reject(); // Exit if an entry already exists
+    }
+
     await new Promise((resolve, reject) => {
         try {
             db.run(
