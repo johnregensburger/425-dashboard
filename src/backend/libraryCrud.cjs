@@ -1,6 +1,5 @@
-const sqlite3 = require("sqlite3").verbose();
+//============================ Crud functions for library database usage ===================================
 const db = require("./database.cjs");
-const users = require("./userCrud.cjs");
 const games = require("./gameCrud.cjs");
 
 // Creates a library entry based on the user and what game they've wishlisted or now own

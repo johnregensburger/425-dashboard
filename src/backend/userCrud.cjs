@@ -1,4 +1,4 @@
-const sqlite3 = require("sqlite3").verbose();
+//=================================== Crud for user database usage =======================================
 const db = require("./database.cjs");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;

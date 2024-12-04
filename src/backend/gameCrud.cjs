@@ -1,4 +1,4 @@
-const sqlite3 = require("sqlite3").verbose();
+//=============================== Crud for game database usage ============================
 const db = require("./database.cjs");
 
 // Create new game with all necessary information

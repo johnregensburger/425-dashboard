@@ -1,4 +1,4 @@
-/*
+/* =========================================== Styling ==============================================
 colors:
 main background: #39171E
 dark accent: #2D0F13
@@ -274,7 +274,6 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 input[type=range]::-moz-range-thumb {
-  -webkit-appearance: none;
   pointer-events: all;
   width: 20px;
   height: 20px;

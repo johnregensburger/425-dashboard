@@ -1,3 +1,4 @@
+//============== individual game information page in both database and library ================
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams} from 'react-router-dom';
 const GameInfo = () => {

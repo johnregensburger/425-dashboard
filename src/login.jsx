@@ -1,3 +1,4 @@
+//================================ landing page: login ==================================
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 const Login = () => {
@@ -12,10 +13,6 @@ const Login = () => {
         [name]: value,
       }));
   };
-
-  const bypassLogin = () => {
-    navigate('/front');     //navigate to front while logged out
- };
 
  const goTologinCreate = () => {
     navigate('/loginCreate'); //Navigate to create user page
@@ -71,8 +68,8 @@ const Login = () => {
     <div className="container">
       <div className="left">
         <header className="content"> {/* make nice looking title card*/}
-          <button className="header" onClick={bypassLogin}>DASHBOARD</button>
-        </header>
+          <button className="header" onClick={() => navigate('/front')}>DASHBOARD</button>
+        </header>  {/* navigate to database w/out logging in */}
         <div className="login-section">
           <h2>Login</h2>
           <button className="link" onClick={goTologinCreate}> Create Account </button>

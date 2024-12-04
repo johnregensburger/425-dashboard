@@ -1,4 +1,4 @@
-// JH 10.24 - Handles SQLite3 database operations
+//=========================== Handles SQLite3 database operations =======================================
 const sqlite3 = require("sqlite3").verbose();
 
 // Create and connect database

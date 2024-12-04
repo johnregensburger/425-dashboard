@@ -1,9 +1,8 @@
-//const sqlite3 = require("sqlite3").verbose();
+//============ Populates the database: dashboard.db. runs on node populateDatabase.cjs =================
 const xml2js = require("xml2js");
 const db = require("./database.cjs");
 
 const apiUrl = "https://boardgamegeek.com/xmlapi/boardgame/"; // Final slash proceeded by ID and ?
-                                                              // ex: boardgame/1?
 
 async function iterate() {
     const gameSize = 100;
