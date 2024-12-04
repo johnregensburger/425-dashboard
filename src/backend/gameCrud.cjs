@@ -44,6 +44,7 @@ async function readGame(id) {
     });
 }
 
+// Returns all games
 async function readAll() {
     return new Promise((resolve, reject) => {
         db.all(
@@ -65,6 +66,7 @@ async function readAll() {
     });
 }
 
+// Searches for a game with specified text filter
 async function filterReadGame(filter) {
     return new Promise((resolve, reject) => {
         db.all(
@@ -97,6 +99,7 @@ async function filterReadGame(filter) {
     });
 }
 
+// Filters games by player number
 async function filterPlayerNumber(min, max) {
     if (min > max) {
         console.error("Minimum players is greater than maximum players. Please adjust and try again.");

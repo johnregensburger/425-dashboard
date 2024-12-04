@@ -191,7 +191,7 @@ async function updateEntry(id, column, newValue) {
     });
 }
 
-// Deletes a library entry
+// Deletes a library entry by ownershipId
 async function deleteEntry(id) {
     db.run(`
         DELETE FROM UserLibrary
