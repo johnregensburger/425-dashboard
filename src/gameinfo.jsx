@@ -101,10 +101,10 @@ const GameInfo = () => {
       alert(`Error: ${error.message || 'Unknown Error'}`);
   }};
 
-  const removeFromLibrary = async (userId) => {
+  const removeFromLibrary = async (userId, gameId) => {
     try {
       console.log("Removing from user library...");
-      const response = await fetch(`http://localhost:3000/libraries/${userId}`, {
+      const response = await fetch(`http://localhost:3000/libraries/${userId}/${gameId}`, {
         method: 'DELETE',
       });
       
@@ -207,7 +207,7 @@ const GameInfo = () => {
                     Add to my Library {/* Is Logged OUT */}
                   </button>
                 )) : (
-                  <button className="filter" onClick={() => removeFromLibrary("owned")}>
+                  <button className="filter" onClick={() => removeFromLibrary(userId, id)}>
                     Remove from my Library {/* Is Logged in */}
                   </button>)}  
               {/* if location is false ^ */}
