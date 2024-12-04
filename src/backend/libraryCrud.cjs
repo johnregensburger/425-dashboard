@@ -205,6 +205,20 @@ async function deleteEntry(id) {
     });
 }
 
+// Uses user and game ID to delete library entry
+async function deleteEntryById(userId, gameId) {
+    db.run(`
+        DELETE FROM UserLibrary
+        WHERE userId = ? AND gameId = ?`, [userId, gameId], function (err) {
+        if (err) {
+            console.log(`ERR: Library entry delete failed. See below:`);
+            console.error(err.message);
+        } else {
+            console.log(`Deleted ${userId}'s copy of ${gameId}`);
+        }
+    });
+}
+
 module.exports = {
     createEntry,
     readEntry,
@@ -213,5 +227,6 @@ module.exports = {
     filterReadLibrary,
     filterPlayerNumber,
     updateEntry,
-    deleteEntry
+    deleteEntry,
+    deleteEntryById
 }
