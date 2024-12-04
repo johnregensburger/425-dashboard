@@ -14,7 +14,7 @@ const Library = () => {
       method: 'GET',
       credentials: 'include', // Include cookies in the request
     });
-
+    console.log("Response: ",response.status);
     if (response.ok) {
       const data = await response.json();
       const userId = data.userID; // Extract user ID from response
@@ -50,7 +50,7 @@ const Library = () => {
 
   const fetchGames = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/userlibrary/${id}`);
+      const response = await fetch(`http://localhost:3000/ulibrary/${id}`);
       if (!response.ok) {
         throw new Error('Failed to fetch games');
       }

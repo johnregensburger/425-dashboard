@@ -288,6 +288,10 @@ exp.post('/libraries', async (req, res) => {
         return res.status(400).json({ error: 'UserId, gameId, and status are required' });
     }
 
+    if (!req.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
     try {
         await libraries.createEntry(userId, gameId, status);
         res.status(201).json({ message: 'Library entry created successfully' });
@@ -307,22 +311,25 @@ exp.get('/libraries', async (req, res) => {
 });
 
 // Read or fetch all games of a specific user
-exp.get('/userlibrary/:id', async (req, res) => { // Add authorizeUser middleware here
-    //console.log(req);
-    const userId = req.user.id;
-    console.log("User ID: " + req.user.id);
+exp.get('/ulibrary/:id', async (req, res) => {
     try {
-        const entries = await libraries.readUserLibrary(userId);
-        if (entries) {
-            res.json(entries);
-            //console.log("Library entries found for user "+ userId);
-        } else {
-            res.status(404).send('Library entries not found');
-        }
+      const userId = req.user?.id || req.params.id;
+  
+      if (!userId) {
+        return res.status(400).json({ error: 'User ID is missing' });
+      }
+  
+      const entries = await libraries.readUserLibrary(userId);
+      if (entries) {
+        res.json(entries);
+      } else {
+        res.status(404).json({ error: 'Library entries not found' });
+      }
     } catch (error) {
-        res.status(500).send(error.message);
+      console.error('Error in /userlibrary/:id:', error.message);
+      res.status(500).json({ error: error.message });
     }
-});
+  });
 
 // Read or fetch all user games of a specific user with the filter parameters
 exp.get('/libraries/:id/filter', async (req, res) => {
