@@ -170,6 +170,11 @@ input.text
   overflow: visible;
 }
 
+.right
+{
+  display: flex;
+}
+
 /*---------------------FRONT CSS--------------------*/
 
 header {

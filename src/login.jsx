@@ -1,6 +1,7 @@
 //================================ landing page: login ==================================
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: '', password: '', }); //sets the automatic formdata to be blank
@@ -14,9 +15,9 @@ const Login = () => {
       }));
   };
 
- const goTologinCreate = () => {
+  const goTologinCreate = () => {
     navigate('/loginCreate'); //Navigate to create user page
- };
+  };
 
   const validateLogin = async () => { 
     const user = formData.username;
@@ -40,8 +41,8 @@ const Login = () => {
 
       if(!response.ok){
         const error = await response.json();
-        setMessage(error.error || 'Invalid username or password');
-        alert("Invalid username or password. Please try again."); //alerts user of invalid response
+        setMessage(error.error || 'Invalid credentials');
+        alert("Invalid credentials. Please try again."); //alerts user of invalid response
         setFormData({ username: '', password: '' }); //resets inputs
         return;
       }
@@ -73,10 +74,15 @@ const Login = () => {
         <div className="login-section">
           <h2>Login</h2>
           <button className="link" onClick={goTologinCreate}> Create Account </button>
-          <input className="text" name="username" type="text" placeholder="Username"
-            value={formData.username} onChange={handleChange}/>
-          <input className="text" name="password" type="password" placeholder="Password"
+          <input
+            className="text" name="username" type="text" placeholder="Username"
+            value={formData.username} onChange={handleChange}
+            onKeyDown={(e) => e.key === 'Enter' && validateLogin(e)} // Enter to login
+          />
+          <input
+            className="text" name="password" type="password" placeholder="Password"
             value={formData.password} onChange={handleChange}
+            onKeyDown={(e) => e.key === 'Enter' && validateLogin(e)} // Enter to login
           />
           <button className="submit" onClick={validateLogin}> Submit </button>
         </div>
