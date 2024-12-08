@@ -6,7 +6,7 @@ const Library = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [games, setGames] = useState([]);
-  const [visibleGames, setVisibleGames] = useState(20);
+  const [visibleGames, setVisibleGames] = useState(25);
   const [userId, setuserId] = useState(null);
 
   const checkLoginStatus = async () => {

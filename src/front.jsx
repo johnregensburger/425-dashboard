@@ -8,7 +8,7 @@ const Front = () => {
   const [fromValue, setFromValue] = useState(1); //filter min
   const [toValue, setToValue] = useState(8);     //filter max
   const [games, setGames] = useState([]);
-  const [visibleGames, setVisibleGames] = useState(20); // Start by showing 20 games
+  const [visibleGames, setVisibleGames] = useState(25); // Start by showing 25 games
 
   const checkLoginStatus = async () => {
     try {

@@ -364,7 +364,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Auto-fill with minimum width of 150px */
   gap: 20px;
   padding: 10px;
-  max-height: 400px; /* Max height for scrollable area */
+  max-height: 500px; /* Max height for scrollable area */
   overflow-y: auto; /* Enable vertical scrolling */
   scrollbar-color: #5F3536 #2D0F13 ;
 }
