@@ -26,6 +26,7 @@ const GameInfo = () => {
       } else {
         const errorData = await response.json();
         console.error('No active session:', errorData);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error fetching user ID:', error);
