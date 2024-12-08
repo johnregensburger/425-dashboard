@@ -34,9 +34,22 @@ const Front = () => {
     setIsSidebarOpen(prevState => !prevState); //when ☰ is clicked it adjusts the page
   };
 
-  const logOut = () => {
-    setIsLoggedIn((prevState) => !prevState);   //tells the page you're logged out
-    navigate('/'); //nav to the Login page and destroys your session token(?)
+  const logOut = async () => {
+    try {
+      // HTML endpoint to logout please
+      const response = await fetch('http://localhost:3000/users/logout', {
+        method: 'POST',
+        credentials: 'include', // include user id in req
+      });
+
+      if (response.ok) {
+        setIsLoggedIn(false); // Set login to false
+        navigate('/') // Nav back to login page
+      }
+    } catch (error) {
+        console.error('Error logging out:', error);
+        alert('Failed to log out. Please try again.');
+    }
   };
 
   const logIn = () => {
