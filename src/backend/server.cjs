@@ -328,6 +328,18 @@ exp.use((req, res, next) => {
         }
     });
 
+    // Check if a user owns a specific game by id
+    exp.get('/libraries/:userId/owns/:gameId', async (req, res) => {
+        const { userId, gameId } = req.params;
+
+        try {
+            const isOwned = await libraries.doesEntryExist(userId, gameId);
+            res.status(200).json({ owned: isOwned })
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+
     // Update library entry
     exp.put('/libraries/:id', async (req, res) => {
         const { column, newValue } = req.body;

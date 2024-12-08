@@ -177,6 +177,27 @@ async function filterPlayerNumber(id, min, max) {
     }
 }
 
+// Read function, returns true/false
+async function doesEntryExist(userId, gameId) {
+    return new Promise((resolve, reject) => { // Return the Promise
+        db.get(
+            `
+            SELECT * FROM UserLibrary WHERE userId = ? AND gameId = ?
+            `,
+            [userId, gameId],
+            (err, row) => {
+                if (err) {
+                    console.error(`ERR: Failed to check for existing entry. See below:`);
+                    console.error(err.message);
+                    reject(err); // Reject with the error if there is one
+                } else {
+                    resolve(!!row); // Resolve with true if a row exists, false otherwise
+                }
+            }
+        );
+    });
+}
+
 // Updates an attribute of a library entry
 async function updateEntry(id, column, newValue) {
     const query = `UPDATE UserLibrary SET ${column} = ? WHERE ownershipId = ?`;
@@ -225,6 +246,7 @@ module.exports = {
     readUserLibrary,
     filterReadLibrary,
     filterPlayerNumber,
+    doesEntryExist,
     updateEntry,
     deleteEntry,
     deleteEntryById
