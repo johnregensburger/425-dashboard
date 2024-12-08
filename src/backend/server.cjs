@@ -335,6 +335,7 @@ exp.use((req, res, next) => {
         try {
             const isOwned = await libraries.doesEntryExist(userId, gameId);
             res.status(200).json({ owned: isOwned })
+            console.log("Is Owned:", isOwned);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

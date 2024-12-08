@@ -7,6 +7,7 @@ const GameInfo = () => {
   const [game, setGame] = useState([]);
   const [userId, setuserId] = useState(null);
   const [location, setLocation] = useState();
+  const [ownership, setOwnership] = useState();
   const navigate = useNavigate();
 
   const checkLoginStatus = async () => {
@@ -30,6 +31,26 @@ const GameInfo = () => {
       alert('Error fetching user ID.');
     }
   };
+
+  const checkOwnership = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/libraries/${userId}/owns/${id}`, {
+        method: 'GET',
+        credentials: 'include', // Include cookies/session
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Ownership status:', data.owned);
+        setOwnership(data.owned);
+      } else {
+        console.error('Failed to fetch ownership status.');
+      }
+    } catch (error) {
+      console.error('Error checking ownership:', error);
+    }
+  };
+  
 
   const logOut = () => {
   setIsLoggedIn((prevState) => !prevState); //tells the page youre logged out
@@ -127,6 +148,7 @@ const GameInfo = () => {
 
   useEffect(() => {   //runs as soon as the page opens.  order matters
     checkLoginStatus();
+    checkOwnership();
     checkLoc(loc);
     fetchGame();
   }, [userId]);
@@ -202,21 +224,22 @@ const GameInfo = () => {
               </div>
             </div>
 
-            {/* if location is true v */}
-            {location ? (
-              isLoggedIn ? (
-                <button className="filter" onClick={() => addToLibrary("owned")}>
-                  Add to my Library {/* Is Logged in */}
+            {/* if logged in is true v */}
+            {isLoggedIn ? (
+              ownership ? (
+                <button className="filter" onClick={() => removeFromLibrary(userId, id)}>
+                  Remove from my Library {/* Owned & Logged In */}
                 </button>
               ) : (
-                <button className="filter" onClick={loginAlert}>
-                  Add to my Library {/* Is Logged OUT */}
+                <button className="filter" onClick={() => addToLibrary("owned")}>
+                  Add to my Library {/* Not Owned & Logged In */}
                 </button>
               )) : (
-                <button className="filter" onClick={() => removeFromLibrary(userId, id)}>
-                  Remove from my Library {/* Is Logged in */}
+                <button className="filter" onClick={loginAlert}>
+                  Add to my Library {/* Logged Out */}
                 </button>)}  
-            {/* if location is false ^ */}
+            {/* if logged in is false ^ */}
+
           </div>
 
           {/* Right side */}
