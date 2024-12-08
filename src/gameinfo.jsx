@@ -187,40 +187,45 @@ const GameInfo = () => {
       {/* Main Content*/}
       <main>
         <div className="info-container">
+
           {/* Left side */}
           <div className="left-info">
             <h1>{game.gameName} - {game.releaseDate}</h1>
             <h2>{game.publisher}, {game.leadDesigner}</h2>
-            <div className="image-container">
-                <img src={game.boxArtUrl} alt={game.gameName}/>
+
+            <div className="dual-container">
+              <div className="image-container">
+                  <img src={game.boxArtUrl} alt={game.gameName}/>
+              </div>
+              <div className="paragraph-handler">
+                <p>{nicerParagraph(game.description)}</p>
+              </div>
             </div>
+
+            {/* if location is true v */}
+            {location ? (
+              isLoggedIn ? (
+                <button className="filter" onClick={() => addToLibrary("owned")}>
+                  Add to my Library {/* Is Logged in */}
+                </button>
+              ) : (
+                <button className="filter" onClick={loginAlert}>
+                  Add to my Library {/* Is Logged OUT */}
+                </button>
+              )) : (
+                <button className="filter" onClick={() => removeFromLibrary(userId, id)}>
+                  Remove from my Library {/* Is Logged in */}
+                </button>)}  
+            {/* if location is false ^ */}
           </div>
+
           {/* Right side */}
           <div className="right-info">
             {/* everything but desc */}
             <div className="mini-container">
-              {/* if location is true v */}
-              {location ? (
-                isLoggedIn ? (
-                  <button className="filter" onClick={() => addToLibrary("owned")}>
-                    Add to my Library {/* Is Logged in */}
-                  </button>
-                ) : (
-                  <button className="filter" onClick={loginAlert}>
-                    Add to my Library {/* Is Logged OUT */}
-                  </button>
-                )) : (
-                  <button className="filter" onClick={() => removeFromLibrary(userId, id)}>
-                    Remove from my Library {/* Is Logged in */}
-                  </button>)}  
-              {/* if location is false ^ */}
               <h2>Players: {game.minPlayers} - {game.maxPlayers}</h2>
               <h2>Age Suggestion: {game.age}+</h2>
               <h2>Avg. Playtime: {game.playTime} min</h2>
-            </div>
-            {/* desc */}
-            <div className="paragraph-handler">
-              <p>{nicerParagraph(game.description)}</p>
             </div>
           </div>
         </div>
