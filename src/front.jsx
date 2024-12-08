@@ -56,6 +56,10 @@ const Front = () => {
     navigate('/'); //nav to the Login page
   };
 
+  const loginAlert = () => {
+    alert('You are not logged in!');
+  };
+
   const goToLibrary = () => {
     navigate('/library'); //nav to library
   };
@@ -112,7 +116,7 @@ const Front = () => {
               Library {/* Is Logged in */}
           </button>
           ) : (
-          <button className="header-btn" onClick={logIn}>
+          <button className="header-btn" onClick={loginAlert}>
             Library {/* Is Logged OUT */}
           </button>
         )}

@@ -40,6 +40,10 @@ const GameInfo = () => {
   navigate('/'); //nav to the Login page
   };
 
+  const loginAlert = () => {
+    alert('You are not logged in!');
+  };
+
   const goToLibrary = () => {
   navigate('/library'); // nav to library
   };
@@ -156,7 +160,7 @@ const GameInfo = () => {
                 Library {/* Is Logged in */}
               </button>
             ) : (
-              <button className="header-btn" onClick={logIn}>
+              <button className="header-btn" onClick={loginAlert}>
                 Library {/* Is Logged OUT */}
               </button>
             )) : (
@@ -185,7 +189,7 @@ const GameInfo = () => {
         <div className="info-container">
           {/* Left side */}
           <div className="left-info">
-            <h1>{game.gameName} {game.releaseDate}</h1>
+            <h1>{game.gameName} - {game.releaseDate}</h1>
             <h2>{game.publisher}, {game.leadDesigner}</h2>
             <div className="image-container">
                 <img src={game.boxArtUrl} alt={game.gameName}/>
@@ -202,7 +206,7 @@ const GameInfo = () => {
                     Add to my Library {/* Is Logged in */}
                   </button>
                 ) : (
-                  <button className="filter" onClick={logIn}>
+                  <button className="filter" onClick={loginAlert}>
                     Add to my Library {/* Is Logged OUT */}
                   </button>
                 )) : (
