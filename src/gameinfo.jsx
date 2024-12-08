@@ -7,7 +7,8 @@ const GameInfo = () => {
   const [game, setGame] = useState([]);
   const [userId, setuserId] = useState(null);
   const [location, setLocation] = useState();
-  const [ownership, setOwnership] = useState();
+  const [ownership, setOwnership] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const checkLoginStatus = async () => {
@@ -48,6 +49,8 @@ const GameInfo = () => {
       }
     } catch (error) {
       console.error('Error checking ownership:', error);
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -141,6 +144,7 @@ const GameInfo = () => {
       }
       console.log("Library Success");
       alert(`Game removed from your library`);  //lets the user know that it was successful
+      checkOwnership();
     } catch(error) {
       console.error('Error:', error);
       alert(`Error: ${error.message || 'Unknown Error'}`);
@@ -148,10 +152,15 @@ const GameInfo = () => {
 
   useEffect(() => {   //runs as soon as the page opens.  order matters
     checkLoginStatus();
-    checkOwnership();
     checkLoc(loc);
     fetchGame();
-  }, [userId]);
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      checkOwnership();
+    }
+  }, [userId]); // Dependency on userId
 
   const nicerParagraph = (desc) => { //removes weird shit that was parsed into the description probably by accident
     const remove = ["<br/>", "&quot;", "&amp;", "&mdash;","&egrave;","&ldquo;","&rdquo;"];
@@ -224,21 +233,29 @@ const GameInfo = () => {
               </div>
             </div>
 
-            {/* if logged in is true v */}
-            {isLoggedIn ? (
-              ownership ? (
-                <button className="filter" onClick={() => removeFromLibrary(userId, id)}>
-                  Remove from my Library {/* Owned & Logged In */}
-                </button>
+            {/* Library Add/Delete logic */}
+            {loading ? (
+              <button className="filter" disabled>
+                {/* Loading */}
+              </button>
+            ) : (
+              // Check if logged in
+              isLoggedIn ? (
+                ownership ? (
+                  <button className="filter" onClick={() => removeFromLibrary(userId, id)}>
+                    Remove from my Library {/* Owned & Logged In */}
+                  </button>
+                ) : (
+                  <button className="filter" onClick={() => addToLibrary("owned")}>
+                    Add to my Library {/* Not Owned & Logged In */}
+                  </button>
+                )
               ) : (
-                <button className="filter" onClick={() => addToLibrary("owned")}>
-                  Add to my Library {/* Not Owned & Logged In */}
-                </button>
-              )) : (
                 <button className="filter" onClick={loginAlert}>
                   Add to my Library {/* Logged Out */}
-                </button>)}  
-            {/* if logged in is false ^ */}
+                </button>
+              )
+            )}
 
           </div>
 
