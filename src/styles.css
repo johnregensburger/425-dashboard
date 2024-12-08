@@ -294,7 +294,7 @@ header button:hover {
 .form_control {
   display: flex;
   justify-content: space-between;
-  font-size: 16px;
+  font-size: 1em;
   margin-top: 5px;
   color: #C6C6C6;
 }

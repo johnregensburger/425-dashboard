@@ -126,6 +126,7 @@ const GameInfo = () => {
       }
       console.log("Library Success");
       alert(`Game added to your library`);  //lets the user know that it was successful
+      checkOwnership();
     }catch(error) {
       console.error('Error:', error);
       alert(`Error: ${error.message || 'Unknown Error'}`);
