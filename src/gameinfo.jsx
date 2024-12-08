@@ -237,7 +237,7 @@ const GameInfo = () => {
             {/* Library Add/Delete logic */}
             {loading ? (
               <button className="filter" disabled>
-                {/* Loading */}
+                &nbsp;{/* Loading */}
               </button>
             ) : (
               // Check if logged in
