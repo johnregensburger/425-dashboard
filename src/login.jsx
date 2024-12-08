@@ -69,11 +69,10 @@ const Login = () => {
     <div className="container">
       <div className="left">
         <header className="content"> {/* make nice looking title card*/}
-          <button className="header" onClick={() => navigate('/front')}>DASHBOARD</button>
+          <h1 className = "header">DASHBOARD</h1>
         </header>  {/* navigate to database w/out logging in */}
         <div className="login-section">
           <h2>Login</h2>
-          <button className="link" onClick={goTologinCreate}> Create Account </button>
           <input
             className="text" name="username" type="text" placeholder="Username"
             value={formData.username} onChange={handleChange}
@@ -85,6 +84,9 @@ const Login = () => {
             onKeyDown={(e) => e.key === 'Enter' && validateLogin(e)} // Enter to login
           />
           <button className="submit" onClick={validateLogin}> Submit </button>
+          <h3>Or sign up</h3>
+          <button className="submit" onClick={goTologinCreate}> Create an account </button>
+          <button className="link" onClick={() => navigate('/front')}>Continue without logging in</button>
         </div>
       </div>
       <div className="right">

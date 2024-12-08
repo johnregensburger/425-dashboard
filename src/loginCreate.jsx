@@ -66,17 +66,18 @@ const LoginCreate = () => {
     <div className="container">
       <div className="left">
         <header className="content">      {/* navigate to database w/out logging in */}
-          <button className="header" onClick={() => navigate('/front')}>DASHBOARD</button>
+          <h1 className = "header">DASHBOARD</h1>
         </header>
         <div className="login-section">
-          <h2>Create Your Account</h2>
-          <input className="text" type="text" name="username" placeholder="username"
+          <h2>Register</h2>
+          <input className="text" type="text" name="username" placeholder="Username"
             value={formData.username || ''} onChange= {handleChange}/>
-          <input className="text" type="password" name="password" placeholder="password"
+          <input className="text" type="password" name="password" placeholder="Password"
             value={formData.password || ''} onChange= {handleChange}/>
-          <input className="text" type="password" name="cpassword" placeholder="confirm password"
+          <input className="text" type="password" name="cpassword" placeholder="Confirm Password"
             value={formData.cpassword || ''} onChange= {handleChange}/>
-          <button className="submit" onClick={handleCreate}> Create Account </button>
+          <button className="submit" onClick={handleCreate}> Sign Up </button>
+          <button className="link" onClick={() => navigate('/')}>Back</button>
         </div>
       </div>
       <div className="right">
