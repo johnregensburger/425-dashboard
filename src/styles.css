@@ -503,4 +503,5 @@ input[type="range"]::-webkit-slider-runnable-track {
   white-space: normal;
   max-width: 480px;
   scrollbar-color: #5F3536 #2D0F13 ;
+  word-wrap: break-word;
 }

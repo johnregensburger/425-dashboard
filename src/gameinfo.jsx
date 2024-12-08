@@ -164,16 +164,30 @@ const GameInfo = () => {
   }, [userId]); // Dependency on userId
 
   const nicerParagraph = (desc) => { //removes weird shit that was parsed into the description probably by accident
-    const remove = ["<br/>", "&quot;", "&amp;", "&mdash;","&egrave;","&ldquo;","&rdquo;"];
-    
+    const entityMap = {
+      "&quot;": '"',
+      "&amp;": "&",
+      "&mdash;": "—",
+      "&egrave;": "è",
+      "&ldquo;": "“",
+      "&rdquo;": "”",
+      "&#039;": "'"
+    };
+
     let text = typeof desc === "string" ? desc : String(desc); //parses desc into a string
 
     if (typeof desc !== "string") {
       return ""; // Return an empty string if it's not a valid string
     }
+
+    const replaceEntities = (str) => {
+      return str
+            .replace(/<br\/>/g, "\n") // Replace <br/> specifically since it is a tag
+            .replace(/&[^;]+;/g, (entity) => entityMap[entity] || ""); // Replace HTML entities instead of removing them
+    };
     
     //removes all of the phrases in the remove array from desc
-    const filteredText = remove.reduce((result, phrase) => result.replaceAll(phrase, " "), text);
+    const filteredText = replaceEntities(text);
     return filteredText;
   };
 
