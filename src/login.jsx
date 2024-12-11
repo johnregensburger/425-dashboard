@@ -70,7 +70,8 @@ const Login = () => {
       <div className="left">
         <header className="content"> {/* make nice looking title card*/}
           <h1 className = "header">DASHBOARD</h1>
-        </header>  {/* navigate to database w/out logging in */}
+          <h3 className = "header">Digital Boardgame Tracker and Database</h3>
+        </header>
         <div className="login-section">
           <h2>Login</h2>
           <input

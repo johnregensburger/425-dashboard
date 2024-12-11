@@ -65,8 +65,9 @@ const LoginCreate = () => {
   return ( 
     <div className="container">
       <div className="left">
-        <header className="content">      {/* navigate to database w/out logging in */}
+        <header className="content">
           <h1 className = "header">DASHBOARD</h1>
+          <h3 className = "header">Digital Boardgame Tracker and Database</h3>
         </header>
         <div className="login-section">
           <h2>Register</h2>

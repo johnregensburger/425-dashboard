@@ -141,6 +141,18 @@ h1.header
   font-family: inherit;
 }
 
+h3.header
+{
+  font-size: 1.5em;
+  line-height: 1.1;
+  padding: 0px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  font-weight:300;
+  font-family: inherit;
+  font-style: italic;
+}
+
 button.header:hover
 {
   color: white; 
