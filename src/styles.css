@@ -491,6 +491,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 
 .mini-container{
+  margin-top: 90px;
   padding: 10px;
 }
 
@@ -502,18 +503,18 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 
 .paragraph-container {
-  margin-left: 15px;
   flex-grow: 1;
   max-width: 60%;
 }
 
 .paragraph-handler{
   margin-top: 5px;
+  margin-right: 20px;
   max-height: calc(80vh - 200px);
   overflow-y: auto; /* Enable scrolling for overflow */
   overflow-x: hidden;
   white-space: normal;
-  max-width: 480px;
+  max-width: 600px;
   scrollbar-color: #5F3536 #2D0F13 ;
   word-wrap: break-word;
 }

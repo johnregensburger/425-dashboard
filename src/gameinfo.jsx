@@ -263,8 +263,10 @@ const GameInfo = () => {
               <div className="image-container">
                   <img src={game.boxArtUrl} alt={game.gameName}/>
               </div>
-              <div className="paragraph-handler">
-                <p>{nicerParagraph(game.description)}</p>
+              <div className="mini-container">
+                <h2>Players: {game.minPlayers} - {game.maxPlayers}</h2>
+                <h2>Age Suggestion: {game.age}+</h2>
+                <h2>Avg. Playtime: {game.playTime} min</h2>
               </div>
             </div>
 
@@ -296,12 +298,9 @@ const GameInfo = () => {
 
           {/* Right side */}
           <div className="right-info">
-            {/* everything but desc */}
-            <div className="mini-container">
-              <h2>Players: {game.minPlayers} - {game.maxPlayers}</h2>
-              <h2>Age Suggestion: {game.age}+</h2>
-              <h2>Avg. Playtime: {game.playTime} min</h2>
-            </div>
+            <div className="paragraph-handler">
+                <p>{nicerParagraph(game.description)}</p>
+              </div>
           </div>
         </div>
       </main>
