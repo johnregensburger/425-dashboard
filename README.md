@@ -4,7 +4,7 @@ CSC 425 final project - a digital boardgame storefront.
 
 ## Overview
 
-A library manager for boardgames built with Vite/React and Express.js. A user friendly app that allows anyone, from beginners to experts, to be able to easily search and discover new board games they might enjoy.
+A library manager for boardgames, built with Vite/React and Express.js. A user friendly app that allows anyone, from beginners to experts, to be able to easily search and discover new board games they might enjoy.
 
  Finding new board games to play can be hard and intimidating for a new hobbyist, and expensive if you don’t end up actually enjoying it. Tapping into this market, we can allow game publishers to advertise their games on our app and one day, perhaps, users may buy directly from our app rather than Amazon or another third party. Board game enthusiasts and newbies alike can use the app to their advantage.
 
