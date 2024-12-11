@@ -35,6 +35,13 @@ const Front = () => {
   };
 
   const logOut = async () => {
+
+    const logoutTrue = window.confirm("Are you sure you want to log out?");
+
+    if (!logoutTrue) {
+      return;
+    }
+
     try {
       // HTML endpoint to logout please
       const response = await fetch('http://localhost:3000/users/logout', {

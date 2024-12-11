@@ -39,9 +39,29 @@ const Library = () => {
     navigate(`/info/${id}/${loc.toString()}`); //go to page of game you clicked on
   };
 
-  const logOut = () => {
-    setIsLoggedIn((prevState) => !prevState); //tells the page youre logged out
-    navigate('/'); // Navigate to the Login page and expires session token(?)
+  const logOut = async () => {
+
+    const logoutTrue = window.confirm("Are you sure you want to log out?");
+
+    if (!logoutTrue) {
+      return;
+    }
+
+    try {
+      // HTML endpoint to logout please
+      const response = await fetch('http://localhost:3000/users/logout', {
+        method: 'POST',
+        credentials: 'include', // include user id in req
+      });
+
+      if (response.ok) {
+        setIsLoggedIn(false); // Set login to false
+        navigate('/') // Nav back to login page
+      }
+    } catch (error) {
+        console.error('Error logging out:', error);
+        alert('Failed to log out. Please try again.');
+    }
   };
     
   const logIn = () => {
